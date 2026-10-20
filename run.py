@@ -79,6 +79,7 @@ current_state = {
     "call_risk": SCENARIO_1_CALL_RISK,
     "door_evidence": SCENARIO_1_DOOR_EVIDENCE
 }
+payment_guard.lock_transfers("Scenario 1 active: Digital arrest extortion caught by Ring oracle", SCENARIO_1_VERDICT.verdict_id)
 
 
 # ==========================================
