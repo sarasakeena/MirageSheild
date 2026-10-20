@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIRAGE-SHIELD | Living Room Scam Defense Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/console/style.css">
+</head>
+<body class="console-body">
+  <!-- TOP NAV & STATUS -->
+  <header class="top-nav">
+    <div class="brand-group">
+      <div class="logo-shield">
+        <span class="shield-glyph">🛡️</span>
+      </div>
+      <div>
+        <div class="brand-title">MIRAGE-SHIELD</div>
+        <div class="brand-subtitle">Physical Evidence Oracle & Living Room Takeover Defense</div>
+      </div>
+    </div>
+
+    <!-- Active Track Badges -->
+    <div class="badges-group">
+      <span class="track-badge ring-track">RING PRIMARY TRACK</span>
+      <span class="track-badge aws-track">AWS BUILDER TRACK</span>
+      <span class="track-badge oss-track">OPEN SOURCE (MCP)</span>
+    </div>
+
+    <!-- Live Telemetry Status -->
+    <div class="telemetry-bar">
+      <div class="tel-item"><span class="dot green"></span> Ring API: <strong id="tel-ring">ONLINE (api.amazonvision.com)</strong></div>
+      <div class="tel-item"><span class="dot green"></span> Bedrock Agent: <strong id="tel-agent">ARMED (Claude 3 / Strands)</strong></div>
+      <div class="tel-item"><span class="dot green"></span> Fire TV: <strong id="tel-tv">VEGA OS SYNCED</strong></div>
+      <div class="tel-item"><span class="dot green"></span> KMS Ledger: <strong id="tel-kms">ACTIVE</strong></div>
+    </div>
+  </header>
+
+  <!-- SCENARIO SWITCHER CONTROLS -->
+  <section class="scenario-bar">
+    <div class="scenario-label">TEST SCENARIOS (ROADMAP GATES):</div>
+    <div class="scenario-buttons">
+      <button class="scen-btn active" id="btn-scen-1" onclick="runScenario(1)">
+        <span class="scen-num">1</span>
+        <div class="scen-text">
+          <strong>Digital Arrest Extortion</strong>
+          <small>Fake CBI officer claims door raid · Ring proves empty porch · TV Takeover</small>
+        </div>
+      </button>
+      <button class="scen-btn" id="btn-scen-2" onclick="runScenario(2)">
+        <span class="scen-num">2</span>
+        <div class="scen-text">
+          <strong>Genuine Family Call</strong>
+          <small>Daughter calls mother · 0 coercion · Stays quiet (Low false alarms)</small>
+        </div>
+      </button>
+      <button class="scen-btn" id="btn-scen-3" onclick="runScenario(3)">
+        <span class="scen-num">3</span>
+        <div class="scen-text">
+          <strong>Amazon Courier Delivery</strong>
+          <small>Real parcel dropped at door · Ring verifies package · Zero false alert</small>
+        </div>
+      </button>
+      <button class="reset-btn" onclick="resetAll()">↺ Reset Demo</button>
+    </div>
+  </section>
+
+  <!-- MULTI-DEVICE 5-PANE LIVING ECOSYSTEM -->
+  <main class="ecosystem-grid">
+    <!-- PANE 1: VICTIM'S SMARTPHONE -->
+    <div class="pane phone-pane">
+      <div class="pane-header">
+        <span class="pane-title">📱 1. VICTIM'S SMARTPHONE</span>
+        <span class="pane-status live" id="call-status-badge">INCOMING VIDEO CALL</span>
+      </div>
+      
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="video-container">
+            <img id="call-video-feed" src="/static/images/scam_officer_call.jpg" alt="Video Call Feed">
+            <div class="caller-id-overlay">
+              <span class="caller-name" id="caller-name-display">ACP Vikram Rathore</span>
+              <span class="caller-org" id="caller-org-display">Crime Branch / Mumbai Narcotics</span>
+            </div>
+            <div class="deepfake-live-tag" id="deepfake-tag">
+              <span class="pulse-red"></span> DEEPFAKE RISK: <strong id="df-percentage">92%</strong>
+            </div>
+          </div>
+
+          <!-- Audio Waveform Animation -->
+          <div class="audio-waveform-bar" id="waveform-bar">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+          </div>
+
+          <!-- Live Transcript Stream -->
+          <div class="transcript-box">
+            <div class="transcript-title">LIVE SPEECH-TO-TEXT (STT) STREAM</div>
+            <p id="transcript-content" class="transcript-text">
+              "Officers have been dispatched and are standing outside your front door right now. Transfer ₹4,50,000 to the RBI verification escrow account immediately or our team will break the door!"
+            </p>
+          </div>
+
+          <!-- Payment Trigger Test -->
+          <div class="payment-action-box">
+            <div class="payment-hdr">EXTORTION TRANSFER TRIGGER:</div>
+            <button class="pay-btn" id="btn-attempt-payment" onclick="attemptPayment()">
+              💳 Pay ₹4,50,000 to RBI Escrow
+            </button>
+            <div class="payment-status-msg" id="payment-status-display">
+              Payment Guard Status: Ready
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANE 2: LIVING ROOM FIRE TV -->
+    <div class="pane tv-pane">
+      <div class="pane-header">
+        <span class="pane-title">📺 2. LIVING ROOM FIRE TV (VEGA OS TAKEOVER)</span>
+        <a href="/firetv" target="_blank" class="pane-link">Open Full TV Window ↗</a>
+      </div>
+      <div class="tv-mock-frame">
+        <iframe src="/firetv" id="tv-iframe" class="tv-embed"></iframe>
+      </div>
+      <div class="tv-control-subbar">
+        <span>TV Remote Simulator:</span>
+        <button class="ctrl-chip" onclick="sendTvKey('ArrowLeft')">◀ Left</button>
+        <button class="ctrl-chip" onclick="sendTvKey('ArrowRight')">▶ Right</button>
+        <button class="ctrl-chip" onclick="sendTvKey('Enter')">⏺ Select / Hang Up</button>
+      </div>
+    </div>
+
+    <!-- PANE 3: RING VIDEO DOORBELL & CHIME ORACLE -->
+    <div class="pane ring-pane">
+      <div class="pane-header">
+        <span class="pane-title">🔔 3. RING PHYSICAL EVIDENCE ORACLE</span>
+        <span class="pane-status armed">GROUND TRUTH</span>
+      </div>
+      <div class="ring-view-card">
+        <div class="ring-feed-wrapper">
+          <img id="ring-camera-feed" src="/static/images/scenario1_empty_porch.jpg" alt="Ring Front Door Feed">
+          <div class="ring-status-overlay">
+            <span class="ring-status-badge" id="door-status-pill">DOOR: CLEAR (0 PEOPLE)</span>
+            <span class="ring-hash-badge" id="door-hash-pill">SHA256: 9f83c18b...</span>
+          </div>
+        </div>
+
+        <div class="ring-stats-table">
+          <div class="r-stat">
+            <span class="r-lbl">People Detected</span>
+            <span class="r-val" id="r-human-count">0</span>
+          </div>
+          <div class="r-stat">
+            <span class="r-lbl">Packages Delivered</span>
+            <span class="r-val" id="r-pkg-count">0</span>
+          </div>
+          <div class="r-stat">
+            <span class="r-lbl">Chime Playback</span>
+            <span class="r-val alert" id="r-chime-status">ALERT SOUNDING</span>
+          </div>
+        </div>
+
+        <div class="contradiction-callout" id="oracle-verdict-callout">
+          <div class="callout-badge">CONTRADICTION PROVED</div>
+          <p id="oracle-contradiction-desc">
+            Ring camera contradicts scammer: Zero persons or law enforcement outside door.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANE 4: FAMILY GUARDIAN PHONE (CO-SIGN WORKFLOW) -->
+    <div class="pane family-pane">
+      <div class="pane-header">
+        <span class="pane-title">👨‍👩‍👧 4. FAMILY GUARDIAN PHONE</span>
+        <span class="pane-status alert" id="family-status-badge">EMERGENCY ALERT</span>
+      </div>
+      <div class="family-card">
+        <div class="alert-sms-bubble">
+          <div class="sms-sender">MIRAGE-SHIELD ALERT · 12:48 PM</div>
+          <div class="sms-body" id="family-sms-body">
+            🚨 <strong>SUSPECTED DIGITAL ARREST SCAM:</strong> Mom is on an active video call with a fake police officer demanding ₹4,50,000.
+            Ring front door camera verifies NO ONE is outside.
+            <strong>Outgoing bank payments have been LOCKED automatically.</strong>
+          </div>
+        </div>
+
+        <div class="cosign-control-box">
+          <div class="cosign-hdr">FAMILY AUTHORIZATION REQUIRED TO RELEASE FUNDS:</div>
+          <div class="cosign-buttons">
+            <button class="cosign-btn reject" onclick="rejectPayment()">
+              ✖ Block & File 1930 Report
+            </button>
+            <button class="cosign-btn approve" onclick="approveCosign()">
+              ✔ Family Co-Sign (Release Transfer)
+            </button>
+          </div>
+          <div class="cosign-result" id="cosign-result-text">
+            Current Status: Transfers Frozen by Policy
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANE 5: STRANDS AGENT & AWS AUDIT LEDGER -->
+    <div class="pane agent-pane">
+      <div class="pane-header">
+        <span class="pane-title">🧠 5. BEDROCK AGENT & AWS KMS AUDIT LEDGER</span>
+        <span class="pane-status kms">KMS SIGNED</span>
+      </div>
+      <div class="agent-terminal">
+        <div class="terminal-logs" id="agent-logs">
+          <div class="t-line info">[12:48:10] Agent initialized with Bedrock & Strands tools.</div>
+          <div class="t-line call">[12:48:11] Incoming call risk evaluated: Coercion=0.96, Deepfake=0.92.</div>
+          <div class="t-line oracle">[12:48:12] Querying Ring Oracle: get_door_evidence(window=6h).</div>
+          <div class="t-line oracle">[12:48:13] Ring returned 0 people, 0 parcels. Physical contradiction confirmed!</div>
+          <div class="t-line action">[12:48:14] Verdict=INTERVENE -> Executed lock_payments & trigger_tv_alert.</div>
+          <div class="t-line kms">[12:48:15] Signed verdict with AWS KMS (RSASSA_PKCS1_V1_5_SHA_256).</div>
+          <div class="t-line kms">[12:48:15] Committed immutable incident to DynamoDB 'mirage_shield_incidents'.</div>
+        </div>
+
+        <div class="kms-signature-box">
+          <div class="kms-lbl">AWS KMS DIGITAL SIGNATURE:</div>
+          <code class="kms-code" id="kms-sig-display">
+            kMS_sig_9f83c18b76d0d2ff881679058b8d4f40f0c05763bf84c35626eb06c4ff94e09d
+          </code>
+          <div class="audit-btn-row">
+            <button class="audit-btn" onclick="verifyKmsSignature()">✔ Verify Cryptographic Integrity</button>
+            <span class="verify-status" id="verify-status-text">Signature Verified Valid</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/console/app.js"></script>
+</body>
+</html>

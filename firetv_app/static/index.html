@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MIRAGE-SHIELD | Fire TV Living Room Defense</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/firetv/tv.css">
+</head>
+<body class="tv-body">
+  <!-- IDLE SCREEN (Normal Fire TV Ambient / Screensaver Mode) -->
+  <div id="tv-ambient-screen" class="tv-ambient">
+    <div class="ambient-header">
+      <div class="brand-tag">
+        <span class="shield-dot"></span> MIRAGE-SHIELD ACTIVE DEFENSE · VEGA OS
+      </div>
+      <div class="clock" id="tv-clock">12:48 PM</div>
+    </div>
+    <div class="ambient-center">
+      <div class="ring-status-pill">
+        <span class="ring-pulse"></span> Ring Doorbell Armed · Front Porch Secure
+      </div>
+      <h1 class="ambient-title">Living Room Security Sentinel</h1>
+      <p class="ambient-subtitle">Monitoring for digital arrest & physical extortion anomalies in real-time</p>
+    </div>
+    <div class="ambient-footer">
+      <div class="shortcut-tip"><span>Press [SELECT]</span> for System Status</div>
+      <div class="shortcut-tip"><span>D-PAD</span> to Navigate</div>
+    </div>
+  </div>
+
+  <!-- FULLSCREEN INTERVENTION TAKEOVER SCREEN -->
+  <div id="tv-intervention-screen" class="tv-takeover hidden">
+    <!-- Top Emergency Banner -->
+    <header class="takeover-header">
+      <div class="urgent-flasher">
+        <span class="siren-icon">🚨</span>
+        <span class="flasher-text">CRITICAL SCAM INTERVENTION</span>
+      </div>
+      <div class="timestamp-box" id="takeover-timestamp">OCT 20, 2026 · 12:48:15 IST</div>
+    </header>
+
+    <!-- Core Takeover Headline -->
+    <section class="headline-container">
+      <h1 class="urgent-headline">POLICE NEVER ARREST OVER VIDEO CALL</h1>
+      <p class="urgent-subheadline">
+        HANG UP IMMEDIATELY. Scammers are impersonating law enforcement using AI deepfakes.
+      </p>
+    </section>
+
+    <!-- Evidence Split Section -->
+    <main class="takeover-content">
+      <!-- Left: Ring Doorbell Evidence Oracle -->
+      <div class="evidence-card ring-evidence-card">
+        <div class="card-header">
+          <span class="card-badge ring-badge">RING PHYSICAL ORACLE</span>
+          <span class="live-pill">● LIVE ENTRANCE FEED</span>
+        </div>
+        <div class="snapshot-wrapper">
+          <img id="tv-snapshot-img" src="/static/images/scenario1_empty_porch.jpg" alt="Ring Front Door Snapshot">
+          <div class="snapshot-overlay">
+            <span class="verified-tag">✔ RING VERIFIED: PORCH CLEAR</span>
+          </div>
+        </div>
+        <div class="evidence-body">
+          <div class="contradiction-banner">
+            <div class="banner-title">🚨 PHYSICAL CONTRADICTION DETECTED</div>
+            <div class="banner-desc" id="tv-contradiction-text">
+              Caller claims Mumbai Crime Branch officers are outside your front door right now.
+              <strong>Ring camera proves 0 people and 0 vehicles at the entrance in the last 6 hours.</strong>
+            </div>
+          </div>
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <span class="m-val" id="tv-human-count">0</span>
+              <span class="m-lbl">People at Door</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val" id="tv-pkg-count">0</span>
+              <span class="m-lbl">Packages</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val" id="tv-ding-count">0</span>
+              <span class="m-lbl">Doorbell Rings</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: AI Scam Intelligence & Protective Actions -->
+      <div class="evidence-card intel-evidence-card">
+        <div class="card-header">
+          <span class="card-badge ai-badge">AI SCAM DETECTOR</span>
+          <span class="risk-pill critical" id="tv-risk-pill">CRITICAL THREAT</span>
+        </div>
+        
+        <div class="intel-body">
+          <!-- Deepfake & Coercion Scores -->
+          <div class="signals-row">
+            <div class="signal-gauge">
+              <div class="gauge-title">Deepfake Likelihood</div>
+              <div class="gauge-bar-wrap">
+                <div class="gauge-bar df-bar" id="tv-df-bar" style="width: 92%;"></div>
+              </div>
+              <div class="gauge-val" id="tv-df-val">92% (Synthetic Uniform Insignia)</div>
+            </div>
+            <div class="signal-gauge">
+              <div class="gauge-title">Coercion Index</div>
+              <div class="gauge-bar-wrap">
+                <div class="gauge-bar coercion-bar" id="tv-coercion-bar" style="width: 96%;"></div>
+              </div>
+              <div class="gauge-val" id="tv-coercion-val">96% (Isolation & Extortion Script)</div>
+            </div>
+          </div>
+
+          <!-- Active Protection Shields -->
+          <div class="protection-status-box">
+            <div class="prot-item active">
+              <span class="prot-icon">🔒</span>
+              <div class="prot-info">
+                <strong>BANK PAYMENTS LOCKED</strong>
+                <span>All outgoing transfers frozen. Family co-sign required.</span>
+              </div>
+            </div>
+            <div class="prot-item active">
+              <span class="prot-icon">👨‍👩‍👧</span>
+              <div class="prot-info">
+                <strong>FAMILY GUARDIANS ALERTED</strong>
+                <span>SMS & push alerts dispatched to Rohan & Pooja.</span>
+              </div>
+            </div>
+            <div class="prot-item active">
+              <span class="prot-icon">🔊</span>
+              <div class="prot-info">
+                <strong>RING CHIME ACTIVE</strong>
+                <span>Living room security chime sounding.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Helpline Callout -->
+          <div class="helpline-box">
+            <div class="helpline-left">
+              <span class="helpline-lbl">NATIONAL CYBER CRIME HELPLINE</span>
+              <span class="helpline-num">1930</span>
+            </div>
+            <div class="helpline-right">
+              <span>Report incident online at:</span>
+              <strong>cybercrime.gov.in</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- TV D-Pad Remote Action Controls -->
+    <footer class="takeover-actions">
+      <div class="dpad-hint">D-PAD REMOTE CONTROLS:</div>
+      <button class="tv-btn primary focused" id="btn-hangup" tabindex="1">
+        <span class="key-tag">[SELECT]</span> End Call & Dismiss
+      </button>
+      <button class="tv-btn secondary" id="btn-doorbell" tabindex="2">
+        <span class="key-tag">[▲ UP]</span> View Doorbell Live
+      </button>
+      <button class="tv-btn danger" id="btn-helpline" tabindex="3">
+        <span class="key-tag">[▼ DOWN]</span> Call 1930 Helpline
+      </button>
+    </footer>
+  </div>
+
+  <script src="/firetv/tv.js"></script>
+</body>
+</html>
