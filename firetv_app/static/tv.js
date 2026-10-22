@@ -110,13 +110,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (data.contradiction_summary) {
-          contradictionText.innerHTML = data.contradiction_summary;
+          const cleanSummary = data.contradiction_summary.replace(/^(🚨\s*)?(PHYSICAL\s*)?CONTRADICTION\s*(DETECTED|CAUGHT|PROVED)?:?\s*/i, '');
+          contradictionText.innerHTML = cleanSummary;
         }
 
         if (data.call_risk) {
           const dfPct = Math.round((data.call_risk.deepfake_score || 0) * 100);
           dfBar.style.width = `${dfPct}%`;
-          dfVal.textContent = `${dfPct}% (Facial Blending Artifacts)`;
+          dfVal.textContent = data.call_risk.deepfake_simulated ? "Deepfake analysis simulated" : `${dfPct}% (Model Detected)`;
 
           const cPct = Math.round((data.call_risk.coercion_score || 0) * 100);
           coercionBar.style.width = `${cPct}%`;

@@ -36,6 +36,53 @@ class MirageShieldAgent:
         self.bedrock_model_id = os.getenv("BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0")
         self.aws_region = os.getenv("AWS_REGION", "us-east-1")
         self._last_verdict: Optional[Verdict] = None
+        self._bedrock_client = None
+        self._bedrock_status = "UNINITIALIZED"
+
+        try:
+            import boto3
+            self._bedrock_client = boto3.client("bedrock-runtime", region_name=self.aws_region)
+            self._bedrock_status = "CLIENT_READY"
+        except Exception as e:
+            self._bedrock_status = f"INIT_FAILED ({type(e).__name__})"
+
+    def _invoke_bedrock_converse(self, call_risk: CallRisk, door_evidence: DoorEvidence, contradiction: bool) -> Optional[Dict[str, Any]]:
+        """
+        Attempts a real Amazon Bedrock Converse API invocation if credentials & model access are active.
+        """
+        if not self._bedrock_client:
+            return None
+
+        prompt = (
+            f"You are the MIRAGE-SHIELD Living Room Defense Agent. Analyze the following signals:\n"
+            f"1. Spoken Claims: {call_risk.physical_claims.raw_claims}\n"
+            f"2. Coercion Score: {call_risk.coercion_score} with flags: {[f.value for f in call_risk.coercion_flags]}\n"
+            f"3. Ring Front Door Evidence: {door_evidence.summary} (Door Status: {door_evidence.door_status.value})\n"
+            f"4. Physical Contradiction Detected: {contradiction}\n\n"
+            f"Output a one-sentence legal and factual reasoning assessment for the victim."
+        )
+
+        try:
+            resp = self._bedrock_client.converse(
+                modelId=self.bedrock_model_id,
+                messages=[{"role": "user", "content": [{"text": prompt}]}],
+                inferenceConfig={"maxTokens": 100, "temperature": 0.2}
+            )
+            output_text = resp["output"]["message"]["content"][0]["text"]
+            logger.info(f"Amazon Bedrock Converse reply: {output_text[:80]}...")
+            return {
+                "success": True,
+                "engine": f"Amazon Bedrock Converse ({self.bedrock_model_id})",
+                "analysis": output_text
+            }
+        except Exception as e:
+            err_code = getattr(e, 'response', {}).get('Error', {}).get('Code', type(e).__name__)
+            logger.warning(f"Bedrock Converse call failed ({err_code}), gracefully using local rule engine.")
+            return {
+                "success": False,
+                "engine": f"Local Rule-Based Heuristic (Bedrock: {err_code})",
+                "error": str(err_code)
+            }
 
     def evaluate(self, call_risk: CallRisk, custom_door_evidence: Optional[DoorEvidence] = None) -> Verdict:
         """
@@ -56,6 +103,15 @@ class MirageShieldAgent:
             claims=call_risk.physical_claims,
             evidence=door_evidence
         )
+
+        # Step 2b: Try real Bedrock Converse call if available
+        bedrock_result = self._invoke_bedrock_converse(call_risk, door_evidence, contradiction_detected)
+        if bedrock_result and bedrock_result.get("success"):
+            reasoning_engine = bedrock_result["engine"]
+        elif bedrock_result:
+            reasoning_engine = bedrock_result["engine"]
+        else:
+            reasoning_engine = "Local Rule-Based Heuristic (Bedrock Client Unavailable)"
 
         # Step 3: Cognitive Decision Matrix
         reasons = []
@@ -140,6 +196,7 @@ class MirageShieldAgent:
             contradiction_detected=contradiction_detected,
             contradiction_summary=contradiction_summary if contradiction_detected else "No physical contradiction.",
             reasons=reasons,
+            reasoning_engine=reasoning_engine,
             door_evidence=door_evidence,
             call_risk=call_risk,
             interventions=interventions

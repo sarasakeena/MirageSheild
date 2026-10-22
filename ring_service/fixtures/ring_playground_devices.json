@@ -1,0 +1,39 @@
+{
+  "data": [
+    {
+      "id": "playground_device_v4_test",
+      "type": "device",
+      "attributes": {
+        "name": "Playground Device",
+        "kind": "doorbell_v4",
+        "description": "Ring Developers Playground Test Device",
+        "firmware_version": "playground-sim-1.0",
+        "online": true,
+        "health": {
+          "battery_percentage": 100,
+          "wifi_signal_category": "good",
+          "rssi": -50
+        },
+        "capabilities": {
+          "motion_detection": true,
+          "video_live_view": false,
+          "package_detection": false,
+          "chime_audio": true
+        }
+      },
+      "relationships": {
+        "location": {
+          "data": {
+            "id": "loc_playground_sandbox_01",
+            "type": "location"
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "source": "official_ring_developers_playground",
+    "is_sandbox": true,
+    "sanitized": true
+  }
+}

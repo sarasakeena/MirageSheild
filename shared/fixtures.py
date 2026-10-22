@@ -46,14 +46,14 @@ SCENARIO_1_CALL_RISK = CallRisk(
     call_id="call_scam_digital_arrest_101",
     timestamp=NOW.isoformat(),
     caller_claimed_identity="ACP Vikram Rathore, Crime Branch / Mumbai Narcotics Bureau",
-    caller_phone="+91 91234 56789",
     deepfake_score=0.92,
     deepfake_artifacts=[
-        "facial_boundary_warping_detected",
-        "abnormal_pupillary_dilation_cadence",
-        "police_uniform_insignia_edge_blur",
-        "audio_lip_sync_latency_mismatch"
+        "facial_boundary_warping_simulated",
+        "abnormal_pupillary_cadence_simulated",
+        "police_uniform_insignia_blur_simulated"
     ],
+    deepfake_simulated=True,
+    deepfake_analysis_note="Deepfake analysis simulated (heuristic benchmark)",
     transcript=(
         "Listen to me carefully Mrs. Sharma. This is ACP Vikram Rathore from Mumbai Crime Branch. "
         "A FedEx parcel containing 16 passports and 150 grams of MDMA sent in your name has been intercepted. "
@@ -102,7 +102,7 @@ SCENARIO_1_VERDICT = Verdict(
     confidence=0.98,
     contradiction_detected=True,
     contradiction_summary=(
-        "🚨 CONTRADICTION CAUGHT: Caller claims Mumbai Crime Branch officers are outside your front door, "
+        "Caller claims Mumbai Crime Branch officers are outside your front door, "
         "but Ring Doorbell verifies 0 people and 0 vehicles at the entrance in the last 6 hours."
     ),
     reasons=[

@@ -56,9 +56,12 @@ class CallRisk(BaseModel):
     caller_phone: str = "+91 98765 43210"
     deepfake_score: float = Field(ge=0.0, le=1.0, description="0.0 to 1.0 deepfake likelihood")
     deepfake_artifacts: List[str] = Field(default_factory=list)
+    deepfake_simulated: bool = True
+    deepfake_analysis_note: str = "Deepfake analysis simulated"
     transcript: str
     coercion_score: float = Field(ge=0.0, le=1.0, description="0.0 to 1.0 coercion index")
     coercion_flags: List[CoercionFlag] = Field(default_factory=list)
+    detected_coercion_snippets: List[str] = Field(default_factory=list)
     physical_claims: PhysicalClaims = Field(default_factory=PhysicalClaims)
     financial_threat: Optional[FinancialThreat] = None
     risk_level: str = "LOW"  # LOW, MEDIUM, CRITICAL
@@ -101,6 +104,7 @@ class Verdict(BaseModel):
     contradiction_detected: bool = False
     contradiction_summary: str = ""
     reasons: List[str] = Field(default_factory=list)
+    reasoning_engine: str = "Local Rule-Based Heuristic (Bedrock Inactive)"
     door_evidence: DoorEvidence
     call_risk: CallRisk
     interventions: InterventionDetails
@@ -122,4 +126,6 @@ class IncidentRecord(BaseModel):
     family_cosign_status: str = "PENDING"  # PENDING, APPROVED, REJECTED
     kms_key_arn: str
     kms_signature: str
+    signature_type: str = "LOCAL_HMAC_SHA256"
+    storage_type: str = "IN_MEMORY"
     dynamodb_status: str = "COMMITTED"

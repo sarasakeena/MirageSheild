@@ -92,9 +92,12 @@ class ScamCallDetector:
             caller_phone=phone_number,
             deepfake_score=deepfake_score,
             deepfake_artifacts=deepfake_artifacts,
+            deepfake_simulated=True,
+            deepfake_analysis_note="Deepfake analysis simulated (heuristic benchmark)",
             transcript=final_transcript,
             coercion_score=coercion_score,
             coercion_flags=coercion_flags,
+            detected_coercion_snippets=snippets,
             physical_claims=physical_claims,
             financial_threat=financial_threat,
             risk_level=risk_level

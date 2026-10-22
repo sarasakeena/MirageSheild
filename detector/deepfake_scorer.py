@@ -35,44 +35,46 @@ class DeepfakeScorer:
         Returns score (0.0 - 1.0) and list of detected artifact signatures.
         """
         # If test clip or predefined metadata is provided
+        # NOTE: No neural network model is loaded in this environment.
+        # Deepfake analysis is explicitly simulated as a heuristic benchmark.
         if video_metadata and "preset" in video_metadata:
             preset = video_metadata["preset"]
             if preset == "scam_acp_deepfake":
                 return {
                     "score": 0.92,
                     "confidence": 0.95,
+                    "is_simulated": True,
+                    "status": "Deepfake analysis simulated",
                     "artifacts": [
-                        "facial_boundary_warping_detected",
-                        "abnormal_pupillary_dilation_cadence",
-                        "police_uniform_insignia_edge_blur",
-                        "audio_lip_sync_latency_mismatch"
+                        "facial_boundary_warping_simulated",
+                        "abnormal_pupillary_cadence_simulated",
+                        "police_uniform_insignia_blur_simulated"
                     ],
                     "details": {
-                        "boundary_jitter_score": 0.89,
-                        "temporal_flicker_score": 0.94,
-                        "lip_sync_delta_ms": 128
+                        "note": "Deepfake analysis simulated (heuristic benchmark)",
+                        "simulated_boundary_score": 0.89
                     }
                 }
             elif preset == "genuine_daughter":
                 return {
                     "score": 0.03,
                     "confidence": 0.98,
+                    "is_simulated": True,
+                    "status": "Deepfake analysis simulated",
                     "artifacts": [],
                     "details": {
-                        "boundary_jitter_score": 0.02,
-                        "temporal_flicker_score": 0.01,
-                        "lip_sync_delta_ms": 12
+                        "note": "Deepfake analysis simulated (clean baseline)"
                     }
                 }
             elif preset == "genuine_courier":
                 return {
                     "score": 0.04,
                     "confidence": 0.97,
+                    "is_simulated": True,
+                    "status": "Deepfake analysis simulated",
                     "artifacts": [],
                     "details": {
-                        "boundary_jitter_score": 0.03,
-                        "temporal_flicker_score": 0.02,
-                        "lip_sync_delta_ms": 15
+                        "note": "Deepfake analysis simulated (clean baseline)"
                     }
                 }
 

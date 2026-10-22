@@ -39,7 +39,7 @@ class AgentTools:
         if claims.claimed_officers_at_door:
             if evidence.human_events_count == 0:
                 summary = (
-                    f"🚨 PHYSICAL CONTRADICTION DETECTED: Caller claims police/officers are standing outside "
+                    f"Caller claims police/officers are standing outside "
                     f"your front door, but Ring Doorbell verifies 0 people at the entrance in the last {evidence.window_hours} hours."
                 )
                 return True, summary
@@ -48,7 +48,7 @@ class AgentTools:
         if claims.claimed_raid_underway:
             if evidence.door_status == DoorStatus.CLEAR:
                 summary = (
-                    f"🚨 PHYSICAL CONTRADICTION DETECTED: Caller threatens an immediate police raid at your premises, "
+                    f"Caller threatens an immediate police raid at your premises, "
                     f"yet Ring Doorbell confirms front entrance is completely clear and undisturbed."
                 )
                 return True, summary

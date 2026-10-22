@@ -33,6 +33,10 @@ class AwsAuditLedger:
         self.kms_key_id = KMS_KEY_ID
         self.table_name = DYNAMODB_TABLE_NAME
         self.use_boto = False
+        self.kms_verified = False
+        self.dynamodb_verified = False
+        self._last_signature_type = "LOCAL_HMAC_SHA256_SANDBOX"
+        self._last_storage_type = "IN_MEMORY_LOCAL_LEDGER"
         self._local_ledger: Dict[str, IncidentRecord] = {}
 
         if not AWS_LOCAL_SIMULATION_MODE and os.getenv("AWS_ACCESS_KEY_ID"):
@@ -41,7 +45,7 @@ class AwsAuditLedger:
                 self.kms_client = boto3.client("kms", region_name=self.region)
                 self.dynamo_client = boto3.client("dynamodb", region_name=self.region)
                 self.use_boto = True
-                logger.info("Connected to live AWS KMS and DynamoDB clients.")
+                logger.info("Initialized live AWS KMS and DynamoDB clients.")
             except Exception as e:
                 logger.warning(f"Could not connect to live AWS services ({e}), falling back to local cryptographic ledger.")
         else:
@@ -49,7 +53,7 @@ class AwsAuditLedger:
 
     def sign_verdict(self, verdict: Verdict) -> Tuple[str, str]:
         """
-        Computes SHA256 digest of verdict payload and signs with AWS KMS.
+        Computes SHA256 digest of verdict payload and signs with AWS KMS or local HMAC-SHA256.
         Returns (signature_base64, digest_hex).
         """
         payload_str = json.dumps(verdict.model_dump(), sort_keys=True)
@@ -65,11 +69,16 @@ class AwsAuditLedger:
                     SigningAlgorithm="RSASSA_PKCS1_V1_5_SHA_256"
                 )
                 sig_b64 = base64.b64encode(resp["Signature"]).decode("utf-8")
+                self.kms_verified = True
+                self._last_signature_type = "AWS_KMS_ASYMMETRIC_RSA"
                 return sig_b64, digest_hex
             except Exception as e:
                 logger.warning(f"Live KMS signing call failed ({e}), falling back to internal cryptographic sign.")
+                self.kms_verified = False
 
         # Local hardware-like cryptographic signing using HMAC-SHA256
+        self.kms_verified = False
+        self._last_signature_type = "LOCAL_HMAC_SHA256_SANDBOX"
         secret_key = os.getenv("KMS_LOCAL_SECRET", "mirage_shield_ledger_master_signing_key_2026").encode()
         local_sig = hmac.new(secret_key, digest, hashlib.sha256).digest()
         sig_b64 = base64.b64encode(local_sig).decode("utf-8")
@@ -77,10 +86,44 @@ class AwsAuditLedger:
 
     def store_incident(self, verdict: Verdict, signature_b64: str) -> IncidentRecord:
         """
-        Commits signed incident to DynamoDB table.
+        Commits signed incident to DynamoDB table or local memory ledger.
         """
         incident_id = f"inc_{verdict.verdict_id.replace('vrd_', '')}"
         
+        kms_arn = (
+            f"arn:aws:kms:{self.region}:123456789012:key/{self.kms_key_id}"
+            if self.kms_verified else "None (Sandbox Local HMAC Active)"
+        )
+        sig_type = "AWS_KMS_ASYMMETRIC_RSA" if self.kms_verified else "LOCAL_HMAC_SHA256_SANDBOX"
+
+        dynamo_success = False
+        if self.use_boto:
+            try:
+                item = {
+                    "incident_id": {"S": incident_id},
+                    "timestamp": {"S": datetime.now(timezone.utc).isoformat()},
+                    "action": {"S": verdict.action.value},
+                    "deepfake_score": {"N": str(verdict.call_risk.deepfake_score)},
+                    "coercion_score": {"N": str(verdict.call_risk.coercion_score)},
+                    "contradiction_summary": {"S": verdict.contradiction_summary},
+                    "kms_signature": {"S": signature_b64},
+                    "kms_key_arn": {"S": kms_arn}
+                }
+                self.dynamo_client.put_item(TableName=self.table_name, Item=item)
+                logger.info(f"Committed incident {incident_id} to DynamoDB table '{self.table_name}'.")
+                dynamo_success = True
+                self.dynamodb_verified = True
+            except Exception as e:
+                logger.warning(f"DynamoDB put_item failed ({e}), saved to local memory ledger.")
+                dynamo_success = False
+                self.dynamodb_verified = False
+        else:
+            self.dynamodb_verified = False
+
+        storage_type = "AMAZON_DYNAMODB" if dynamo_success else "IN_MEMORY_LOCAL_LEDGER"
+        dynamo_status = "COMMITTED_TO_DYNAMODB" if dynamo_success else "LOCAL_MEMORY_FALLBACK (DynamoDB Inactive)"
+        self._last_storage_type = storage_type
+
         record = IncidentRecord(
             incident_id=incident_id,
             timestamp=datetime.now(timezone.utc).isoformat(),
@@ -94,30 +137,15 @@ class AwsAuditLedger:
             snapshot_hash=verdict.door_evidence.latest_snapshot_hash,
             payment_lock_active=verdict.interventions.payment_locked,
             family_cosign_status="PENDING" if verdict.interventions.payment_locked else "NONE",
-            kms_key_arn=f"arn:aws:kms:{self.region}:123456789012:key/{self.kms_key_id}",
+            kms_key_arn=kms_arn,
             kms_signature=signature_b64,
-            dynamodb_status="COMMITTED"
+            signature_type=sig_type,
+            storage_type=storage_type,
+            dynamodb_status=dynamo_status
         )
 
-        if self.use_boto:
-            try:
-                item = {
-                    "incident_id": {"S": record.incident_id},
-                    "timestamp": {"S": record.timestamp},
-                    "action": {"S": record.action.value},
-                    "deepfake_score": {"N": str(record.deepfake_score)},
-                    "coercion_score": {"N": str(record.coercion_score)},
-                    "contradiction_summary": {"S": record.contradiction_summary},
-                    "kms_signature": {"S": record.kms_signature},
-                    "kms_key_arn": {"S": record.kms_key_arn}
-                }
-                self.dynamo_client.put_item(TableName=self.table_name, Item=item)
-                logger.info(f"Committed incident {incident_id} to DynamoDB table '{self.table_name}'.")
-            except Exception as e:
-                logger.warning(f"DynamoDB put_item failed ({e}), saved to local memory ledger.")
-
         self._local_ledger[incident_id] = record
-        logger.info(f"💾 [AWS AUDIT LEDGER] Incident {incident_id} recorded with KMS signature.")
+        logger.info(f"💾 [AUDIT LEDGER] Incident {incident_id} recorded ({sig_type} / {storage_type}).")
         return record
 
     def get_incident(self, incident_id: str) -> Optional[IncidentRecord]:
