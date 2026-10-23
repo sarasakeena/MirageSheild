@@ -156,12 +156,29 @@
             </div>
           </div>
 
-          <!-- Contradiction Explanation Callout -->
-          <div class="contradiction-callout" id="oracle-verdict-callout">
-            <div class="callout-badge">🚨 PHYSICAL CONTRADICTION DETECTED</div>
-            <p id="oracle-contradiction-desc">
-              Caller claims Mumbai Crime Branch officers are outside your front door, but Ring Doorbell verifies 0 people and 0 vehicles at the entrance in the last 6 hours.
-            </p>
+          <!-- Contradiction Hero: Side-by-Side Split Card -->
+          <div class="contradiction-callout contradiction-split-hero" id="oracle-verdict-callout">
+            <div class="split-col claim-col">
+              <div class="split-col-header">
+                <span class="split-tag claim-tag">🚨 CALLER CLAIMS</span>
+                <span class="callout-badge split-pill-sub">Extortion Script</span>
+              </div>
+              <div class="split-lead-text">"Armed police outside your door"</div>
+              <div class="split-detail-text">Threatens door raid & demands ₹4,50,000 transfer</div>
+            </div>
+            <div class="split-divider">
+              <span class="vs-circle">VS</span>
+            </div>
+            <div class="split-col truth-col">
+              <div class="split-col-header">
+                <span class="split-tag truth-tag">✔ RING SENSOR SHOWS</span>
+                <span class="split-pill-sub verified">Physical Truth</span>
+              </div>
+              <div class="split-lead-text truth-accent">Porch clear · 0 people · 0 vehicles</div>
+              <p id="oracle-contradiction-desc" class="split-desc-text">
+                Caller claims Mumbai Crime Branch officers are outside your front door, but Ring Doorbell verifies 0 people and 0 vehicles at the entrance in the last 6 hours.
+              </p>
+            </div>
           </div>
 
           <!-- Clean Metric Chips Row: 0 Humans, 0 Packages, 0 Dings -->
@@ -210,13 +227,22 @@
         <!-- ACTION BAR: Prominent 1930 Helpline & End Call Buttons -->
         <footer class="theater-actions-bar">
           <button class="theater-action-btn helpline" id="btn-theater-helpline" onclick="dial1930()">
-            📞 1930 Cyber Helpline
+            <span class="btn-icon">📞</span>
+            <span class="btn-text">1930 Cyber Helpline</span>
           </button>
           <button class="theater-action-btn end-call focused" id="btn-theater-hangup" onclick="endCallAndProtect()">
-            ⏹ [SELECT] End Call & Protect Account
+            <span class="keycap keycap-select-light">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+              SELECT
+            </span>
+            <span class="btn-text">End Call & Protect Account</span>
           </button>
           <button class="theater-action-btn doorbell" id="btn-theater-doorbell" onclick="viewDoorbellLive()">
-            [▲ UP] View Doorbell Live
+            <span class="keycap keycap-nav">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
+              UP
+            </span>
+            <span class="btn-text">View Doorbell Live</span>
           </button>
         </footer>
 

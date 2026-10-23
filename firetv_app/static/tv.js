@@ -31,9 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Clock ticker
   function updateClock() {
     const now = new Date();
-    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const timeStr = now.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' });
     if (clockEl) clockEl.textContent = timeStr;
-    if (timestampEl) timestampEl.textContent = now.toUTCString();
+    if (timestampEl) {
+      const dateStr = now.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
+      const secStr = now.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+      timestampEl.textContent = `${dateStr} · ${secStr} IST`;
+    }
   }
   setInterval(updateClock, 1000);
   updateClock();

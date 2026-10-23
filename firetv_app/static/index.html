@@ -44,9 +44,9 @@
 
     <!-- Core Takeover Headline -->
     <section class="headline-container">
-      <h1 class="urgent-headline">POLICE NEVER ARREST OVER VIDEO CALL</h1>
+      <h1 class="urgent-headline">🚨 DIGITAL ARREST SCAM DETECTED: HANG UP IMMEDIATELY</h1>
       <p class="urgent-subheadline">
-        HANG UP IMMEDIATELY. Scammers are impersonating law enforcement using AI deepfakes.
+        Indian Law Enforcement never conducts arrests or trials over video calls.
       </p>
     </section>
 
@@ -65,13 +65,31 @@
           </div>
         </div>
         <div class="evidence-body">
-          <div class="contradiction-banner">
-            <div class="banner-title">🚨 PHYSICAL CONTRADICTION DETECTED</div>
-            <div class="banner-desc" id="tv-contradiction-text">
-              Caller claims Mumbai Crime Branch officers are outside your front door right now.
-              <strong>Ring camera proves 0 people and 0 vehicles at the entrance in the last 6 hours.</strong>
+          <!-- Contradiction Hero: Side-by-Side Split Card -->
+          <div class="contradiction-split-hero">
+            <div class="split-col claim-col">
+              <div class="split-col-header">
+                <span class="split-tag claim-tag">🚨 CALLER CLAIMS</span>
+                <span class="split-pill-sub">Extortion Script</span>
+              </div>
+              <div class="split-lead-text">"Armed police outside your door"</div>
+              <div class="split-detail-text">Threatens door raid & demands ₹4,50,000 transfer</div>
+            </div>
+            <div class="split-divider">
+              <span class="vs-circle">VS</span>
+            </div>
+            <div class="split-col truth-col">
+              <div class="split-col-header">
+                <span class="split-tag truth-tag">✔ RING SENSOR SHOWS</span>
+                <span class="split-pill-sub verified">Physical Truth</span>
+              </div>
+              <div class="split-lead-text truth-accent">Porch clear · 0 people · 0 vehicles</div>
+              <div class="banner-desc" id="tv-contradiction-text">
+                Ring camera proves 0 people and 0 vehicles at the entrance in the last 6 hours.
+              </div>
             </div>
           </div>
+
           <div class="metrics-grid">
             <div class="metric-box">
               <span class="m-val" id="tv-human-count">0</span>
@@ -157,15 +175,27 @@
 
     <!-- TV D-Pad Remote Action Controls -->
     <footer class="takeover-actions">
-      <div class="dpad-hint">D-PAD REMOTE CONTROLS:</div>
+      <div class="dpad-hint">D-PAD REMOTE:</div>
       <button class="tv-btn primary focused" id="btn-hangup" tabindex="1">
-        <span class="key-tag">[SELECT]</span> End Call & Dismiss
+        <span class="keycap keycap-select">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+          SELECT
+        </span>
+        <span class="btn-text">End Call & Dismiss</span>
       </button>
       <button class="tv-btn secondary" id="btn-doorbell" tabindex="2">
-        <span class="key-tag">[▲ UP]</span> View Doorbell Live
+        <span class="keycap keycap-nav">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
+          UP
+        </span>
+        <span class="btn-text">View Doorbell Live</span>
       </button>
       <button class="tv-btn danger" id="btn-helpline" tabindex="3">
-        <span class="key-tag">[▼ DOWN]</span> Call 1930 Helpline
+        <span class="keycap keycap-nav">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
+          DOWN
+        </span>
+        <span class="btn-text">Call 1930 Helpline</span>
       </button>
     </footer>
   </div>
