@@ -124,6 +124,49 @@ function startCallTimer() {
   callTimerInterval = setInterval(tick, 1000);
 }
 
+// Update Home Safety Status Hero Card Dynamically
+function updateSafetyHero(scenarioId) {
+  const heroCard = document.getElementById('safety-hero-status');
+  const heroIcon = document.getElementById('safety-hero-icon');
+  const heroTitle = document.getElementById('safety-hero-headline');
+  const heroDesc = document.getElementById('safety-hero-desc');
+  const dotRing = document.getElementById('dot-ring');
+  const dotAgent = document.getElementById('dot-agent');
+  const dotGuard = document.getElementById('dot-guard');
+  const dotFamily = document.getElementById('dot-family');
+
+  if (!heroCard) return;
+
+  if (scenarioId === 1) {
+    heroCard.className = 'safety-hero-card threat';
+    if (heroIcon) heroIcon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+    if (heroTitle) heroTitle.textContent = 'Potential Scam Extortion Detected';
+    if (heroDesc) heroDesc.textContent = 'Physical evidence contradicts caller claims. Living-room shields active.';
+    if (dotRing) dotRing.className = 'status-dot green';
+    if (dotAgent) dotAgent.className = 'status-dot green';
+    if (dotGuard) dotGuard.className = 'status-dot red';
+    if (dotFamily) dotFamily.className = 'status-dot green';
+  } else if (scenarioId === 2) {
+    heroCard.className = 'safety-hero-card safe';
+    if (heroIcon) heroIcon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>`;
+    if (heroTitle) heroTitle.textContent = 'Your home is safe right now.';
+    if (heroDesc) heroDesc.textContent = 'No threats detected outside. All systems operational.';
+    if (dotRing) dotRing.className = 'status-dot green';
+    if (dotAgent) dotAgent.className = 'status-dot green';
+    if (dotGuard) dotGuard.className = 'status-dot green';
+    if (dotFamily) dotFamily.className = 'status-dot green';
+  } else if (scenarioId === 3) {
+    heroCard.className = 'safety-hero-card delivery';
+    if (heroIcon) heroIcon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`;
+    if (heroTitle) heroTitle.textContent = 'Courier Delivery Verified';
+    if (heroDesc) heroDesc.textContent = 'Amazon parcel detected at front door. Verified physical delivery.';
+    if (dotRing) dotRing.className = 'status-dot blue';
+    if (dotAgent) dotAgent.className = 'status-dot green';
+    if (dotGuard) dotGuard.className = 'status-dot green';
+    if (dotFamily) dotFamily.className = 'status-dot blue';
+  }
+}
+
 // Run Scenario
 async function runScenario(scenarioId) {
   currentScenarioId = scenarioId;
@@ -155,12 +198,16 @@ function applyScenarioUI(data) {
     try { tvIframe.contentWindow.location.reload(); } catch(_) {}
   }
 
+  // Update Home Safety Status Hero Card
+  updateSafetyHero(currentScenarioId);
+
   // Update Dynamic Claim vs Reality Fields
   const claimCountEl = document.getElementById('claim-count');
   const claimSubEl = document.getElementById('claim-sub');
   const transcriptQuoteEl = document.getElementById('transcript-quote');
   const dfScoreNumber = document.getElementById('df-score-number');
   const dfProgressBar = document.getElementById('df-progress-bar');
+  const dfSvgRing = document.getElementById('df-svg-ring');
   const tvStatusChip = document.getElementById('tv-status-chip');
   const chimeChip = document.getElementById('chime-chip');
 
@@ -192,6 +239,12 @@ function applyScenarioUI(data) {
     const scoreVal = cRisk.deepfake_confidence || 0;
     if (dfScoreNumber) dfScoreNumber.textContent = scoreVal.toFixed(2);
     if (dfProgressBar) dfProgressBar.style.width = `${Math.round(scoreVal * 100)}%`;
+    if (dfSvgRing) {
+      const circ = 201.06;
+      const offset = circ * (1 - scoreVal);
+      dfSvgRing.setAttribute('stroke-dashoffset', offset.toFixed(2));
+      dfSvgRing.setAttribute('stroke', scoreVal > 0.4 ? '#E11D48' : '#10B981');
+    }
   }
 
   if (currentScenarioId === 1) {
@@ -307,9 +360,9 @@ function applyScenarioUI(data) {
     callStatusBadge.className = 'badge-pill-live';
     paymentStatusEl.textContent = 'Payment Guard: Armed & Normal [Simulated Gateway]';
 
-    if (ringFeed) ringFeed.src = '/static/images/scenario1_empty_porch.jpg';
-    doorStatusPill.textContent = 'DOOR: CLEAR';
-    doorHashPill.textContent = 'SHA256: 9f83c18b...';
+    if (ringFeed) ringFeed.src = '/static/images/scenario2_family_visit.jpg';
+    doorStatusPill.textContent = 'DOOR: VERIFIED FAMILY (DAUGHTER AT ENTRANCE)';
+    doorHashPill.textContent = 'SHA256: 3c91a0c8...';
 
     if (oracleCallout) {
       oracleCallout.style.display = 'flex';
@@ -461,26 +514,42 @@ async function loadRecentIncidents() {
       return;
     }
 
-    container.innerHTML = incidents.slice(0, 4).map(inc => {
+    container.innerHTML = incidents.slice(0, 3).map(inc => {
       const isIntervene = inc.action === 'INTERVENE';
-      const pillClass = isIntervene ? 'danger' : 'safe';
-      const circleClass = isIntervene ? 'red' : 'green';
-      const badgeText = isIntervene ? 'HIGH RISK' : 'VERIFIED SAFE';
+      const isDelivery = inc.action === 'DELIVERY' || (inc.incident_id || '').toLowerCase().includes('courier');
+      let pillClass = 'safe';
+      let circleClass = 'green';
+      let badgeText = 'VERIFIED SAFE';
+      let icoSvg = '<polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>';
+
+      if (isIntervene) {
+        pillClass = 'danger';
+        circleClass = 'red';
+        badgeText = 'HIGH RISK';
+        icoSvg = '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>';
+      } else if (isDelivery) {
+        pillClass = 'delivery';
+        circleClass = 'blue';
+        badgeText = 'VERIFIED DELIVERY';
+        icoSvg = '<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>';
+      }
+
       const timeStr = inc.timestamp ? inc.timestamp.substring(11, 16) : '14:32';
       return `
         <div class="incident-row">
-          <div class="inc-ico-circle ${circleClass}">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+          <div class="inc-top-row">
+            <div class="inc-ico-circle ${circleClass}">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${icoSvg}</svg>
+            </div>
+            <div class="inc-main">
+              <span class="inc-title">${inc.incident_id || 'Incident Recorded'}</span>
+              <span class="inc-sub">${isIntervene ? 'Scam call blocked by Ring Oracle' : (isDelivery ? 'Amazon delivery confirmed' : 'Verified safe interaction')}</span>
+            </div>
           </div>
-          <div class="inc-main">
-            <span class="inc-title">${inc.incident_id || 'Incident Recorded'}</span>
-            <span class="inc-sub">${isIntervene ? 'Scam call blocked by Ring Oracle' : 'Verified safe interaction'}</span>
+          <div class="inc-bottom-row">
+            <span class="inc-time">${timeStr} · 23 Oct 2026</span>
+            <span class="inc-badge-pill ${pillClass}">${badgeText}</span>
           </div>
-          <span class="inc-time">${timeStr}<br>23 Oct 2026</span>
-          <span class="inc-badge-pill ${pillClass}">${badgeText}</span>
-          <span class="inc-meta-ring">Ring: Verified</span>
-          <span class="inc-meta-extra">HMAC-SHA256</span>
-          <span class="inc-arrow">›</span>
         </div>
       `;
     }).join('');
@@ -518,15 +587,19 @@ function closeTakeoverModal() {
   if (modal) modal.classList.remove('open');
 }
 
-// Toggle Victim Phone Drawer
-function toggleVictimPhoneDrawer(forceState) {
-  const drawer = document.getElementById('victim-phone-drawer');
+// Toggle Detailed Analysis Drawer
+function toggleDetailedAnalysisDrawer(forceState) {
+  const drawer = document.getElementById('detailed-analysis-drawer');
   if (!drawer) return;
   if (typeof forceState === 'boolean') {
     drawer.classList.toggle('open', forceState);
   } else {
     drawer.classList.toggle('open');
   }
+}
+
+function toggleVictimPhoneDrawer(forceState) {
+  toggleDetailedAnalysisDrawer(forceState);
 }
 
 // Payment Attempt

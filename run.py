@@ -163,7 +163,9 @@ async def get_ring_door_evidence(window_hours: int = 6):
 async def get_latest_snapshot():
     """Serves the latest Ring video doorbell snapshot."""
     img_name = "scenario1_empty_porch.jpg"
-    if current_state["scenario_id"] == 3:
+    if current_state["scenario_id"] == 2:
+        img_name = "scenario2_family_visit.jpg"
+    elif current_state["scenario_id"] == 3:
         img_name = "scenario3_amazon_delivery.jpg"
     snapshot_path = static_dir / "images" / img_name
     if snapshot_path.exists():

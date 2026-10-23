@@ -1,35 +1,49 @@
 /* MIRAGE-SHIELD Fire TV (Vega OS) Design System
-   Exact visual token parity with Master Console:
-   bg #03080D, panel #07111B, panel-2 #0A1521, border #183044, red #FF304F, blue #58B8FF, green #24D99A
-   Target: 1920x1080 fixed 10-foot UI, zero scrollbar, header always visible
+   10-Foot Living Room Interface
+   Tokens:
+   bg-tv: #111B29 (Deep structural navy)
+   panel-tv: #1A283C (Secondary navy frame)
+   surface-card: #F7F4EE (Soft ivory high-contrast reading card)
+   text-dark: #19263A (Ink navy)
+   text-light: #E2E8F0 (Light slate)
+   red: #C93648 (Muted crimson)
+   green: #248365 (Deep green)
+   blue: #4778B8 (Muted blue)
+   Target: 1920x1080 fixed 10-foot UI, zero scrollbar, overscan safe
 */
 
 :root {
-  --bg: #03080D;
-  --panel: #07111B;
-  --panel-2: #0A1521;
-  --border: #183044;
-  --border-focus: #284c6c;
+  --bg-tv: #111B29;
+  --panel-tv: #1A283C;
+  --surface-card: #F7F4EE;
+  --surface-subtle: #E2DBD0;
+  --border-tv: #2A3E59;
+  --border-card: #D5CEC3;
 
-  --text: #E8F0F8;
-  --text-2: #91A6BB;
-  --muted: #61778C;
+  --text-dark: #19263A;
+  --text-dark-sec: #647184;
+  --text-light: #E2E8F0;
+  --text-light-muted: #8E9BAE;
 
-  --red: #FF304F;
-  --deep-red: #641525;
-  --red-glow: rgba(255, 48, 79, 0.45);
+  --red: #C93648;
+  --red-subtle: #FBECEE;
+  --red-border: #F3CCD1;
+  --red-text: #A82435;
 
-  --blue: #58B8FF;
-  --blue-subtle: rgba(88, 184, 255, 0.12);
+  --green: #248365;
+  --green-subtle: #EAF5F1;
+  --green-border: #C8E5DB;
 
-  --green: #24D99A;
-  --green-subtle: rgba(36, 217, 154, 0.12);
+  --blue: #4778B8;
+  --blue-subtle: #EDF3FA;
+  --blue-border: #C8DBF0;
 
   --font-display: 'Space Grotesk', -apple-system, sans-serif;
   --font-body: 'Inter', -apple-system, sans-serif;
-  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  --font-mono: 'IBM Plex Mono', monospace;
 
-  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
   --radius-sm: 6px;
 }
 
@@ -44,21 +58,25 @@ body.tv-body {
   height: 100vh;
   max-height: 1080px;
   overflow: hidden;
-  background-color: var(--bg);
+  background-color: var(--bg-tv);
   font-family: var(--font-body);
-  color: var(--text);
+  color: var(--text-light);
   user-select: none;
 }
 
-/* ================= AMBIENT MODE ================= */
+/* ================= 1. AMBIENT SCREENSAVER MODE ================= */
 .tv-ambient {
   width: 100vw;
   height: 100vh;
-  padding: 3vw 4vw;
+  padding: 3.5vw 4.5vw;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: radial-gradient(circle at 50% 25%, #0A1521 0%, #03080D 80%);
+  background: radial-gradient(circle at 50% 25%, #18263A 0%, #111B29 80%);
+}
+
+.tv-ambient.hidden, .tv-takeover.hidden {
+  display: none !important;
 }
 
 .ambient-header {
@@ -70,9 +88,9 @@ body.tv-body {
 .brand-tag {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.2vw;
-  letter-spacing: 0.1em;
-  color: var(--text-2);
+  font-size: 1.1vw;
+  letter-spacing: 0.08em;
+  color: var(--text-light-muted);
   display: flex;
   align-items: center;
   gap: 0.6vw;
@@ -88,9 +106,9 @@ body.tv-body {
 
 .clock {
   font-family: var(--font-mono);
-  font-size: 1.6vw;
+  font-size: 1.5vw;
   font-weight: 700;
-  color: var(--text);
+  color: var(--text-light);
 }
 
 .ambient-center {
@@ -102,354 +120,269 @@ body.tv-body {
 .ring-status-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.5vw;
+  gap: 0.6vw;
+  background: rgba(36, 131, 101, 0.15);
+  border: 1px solid var(--green);
+  color: #5CD2AF;
   padding: 0.5vw 1.2vw;
-  background: var(--blue-subtle);
-  border: 1px solid rgba(88, 184, 255, 0.3);
   border-radius: 50px;
-  color: var(--blue);
   font-size: 1.1vw;
   font-weight: 600;
-  margin-bottom: 1.5vw;
+  margin-bottom: 1.2vw;
 }
 
 .ring-pulse {
-  width: 0.5vw;
-  height: 0.5vw;
+  width: 0.6vw;
+  height: 0.6vw;
   border-radius: 50%;
-  background: var(--blue);
-  box-shadow: 0 0 8px var(--blue);
+  background: var(--green);
+  animation: pulse-ring 2s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(36, 131, 101, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(36, 131, 101, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(36, 131, 101, 0); }
 }
 
 .ambient-title {
   font-family: var(--font-display);
-  font-size: 3.5vw;
+  font-size: 3.2vw;
   font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  color: #FFFFFF;
   margin-bottom: 0.8vw;
-  color: var(--text);
+  letter-spacing: -0.02em;
 }
 
 .ambient-subtitle {
-  font-size: 1.4vw;
-  color: var(--text-2);
+  font-size: 1.25vw;
+  color: var(--text-light-muted);
+  line-height: 1.4;
 }
 
 .ambient-footer {
   display: flex;
-  gap: 2vw;
   justify-content: center;
+  gap: 2.5vw;
+  border-top: 1px solid var(--border-tv);
+  padding-top: 1.5vw;
 }
 
 .shortcut-tip {
-  font-size: 1vw;
-  color: var(--muted);
+  font-size: 0.95vw;
+  color: var(--text-light-muted);
 }
-
 .shortcut-tip span {
-  color: var(--text-2);
+  color: var(--text-light);
   font-weight: 600;
+  background: var(--panel-tv);
+  padding: 0.2vw 0.5vw;
+  border-radius: 4px;
 }
 
-/* ================= FULLSCREEN TAKEOVER (1920x1080 FIT) ================= */
+/* ================= 2. CRITICAL INTERVENTION TAKEOVER ================= */
 .tv-takeover {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100vw;
   height: 100vh;
-  max-height: 1080px;
-  overflow: hidden;
-  padding: 1.4vw 2.6vw 1.6vw 2.6vw;
+  padding: 2.5vh 3.5vw 2vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: radial-gradient(circle at 50% 10%, #1e060d 0%, #03080D 75%);
-  z-index: 1000;
-  box-shadow: inset 0 0 100px rgba(255, 48, 79, 0.25);
-  animation: takeover-enter 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  background: var(--bg-tv);
 }
 
-@keyframes takeover-enter {
-  0% { opacity: 0; transform: scale(0.98); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-.tv-takeover.hidden {
-  display: none;
-}
-
-/* Top Emergency Header */
 .takeover-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.4vw;
+  border-bottom: 1px solid var(--border-tv);
+  padding-bottom: 1.2vh;
 }
 
 .urgent-flasher {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.6vw;
-  padding: 0.35vw 0.9vw;
+  gap: 0.7vw;
   background: var(--red);
+  color: #FFFFFF;
+  padding: 0.45vw 1.2vw;
   border-radius: var(--radius-sm);
-  color: #fff;
-}
-
-.siren-icon {
-  stroke: #fff;
-}
-
-.flasher-text {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 1vw;
-  letter-spacing: 0.08em;
-  color: #fff;
+  font-size: 1.1vw;
+  letter-spacing: 0.06em;
 }
 
 .timestamp-box {
   font-family: var(--font-mono);
-  font-size: 1vw;
-  color: #fca5a5;
-  font-weight: 600;
+  font-size: 1.1vw;
+  font-weight: 700;
+  color: var(--text-light-muted);
 }
 
-/* Core Headline */
+/* Big High-Contrast Headline */
 .headline-container {
-  margin: 0.4vw 0 0.8vw 0;
+  margin: 1.2vh 0 1.5vh;
   text-align: center;
 }
 
 .urgent-headline {
   font-family: var(--font-display);
-  font-size: 2.2vw;
+  font-size: 2.3vw;
   font-weight: 800;
-  color: #ffffff;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-  text-shadow: 0 0 24px var(--red-glow);
-  margin-bottom: 0.2vw;
-  line-height: 1.15;
+  color: #FFFFFF;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.4vh;
 }
 
 .urgent-subheadline {
-  font-size: 1.1vw;
-  color: var(--text-2);
-  font-weight: 500;
+  font-size: 1.2vw;
+  color: #F87171;
+  font-weight: 600;
 }
 
-/* Content Split Grid */
+/* Two-Column Split Workspace on TV (Soft Ivory Surface Cards for Legibility) */
 .takeover-content {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 1.4vw;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2vw;
   flex: 1;
   min-height: 0;
-  margin-bottom: 0.8vw;
+  margin-bottom: 1.5vh;
 }
 
 .evidence-card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1vw;
+  background: var(--surface-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-card);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-}
-
-.ring-evidence-card {
-  border-color: rgba(88, 184, 255, 0.4);
-}
-
-.intel-evidence-card {
-  border-color: rgba(255, 48, 79, 0.4);
+  padding: 1.5vw;
+  color: var(--text-dark);
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.6vw;
+  margin-bottom: 1vw;
 }
 
 .card-badge {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.85vw;
+  font-size: 0.95vw;
+  font-weight: 800;
   letter-spacing: 0.05em;
-  padding: 0.2vw 0.6vw;
-  border-radius: 4px;
+  text-transform: uppercase;
 }
 
-.ring-badge {
-  background: var(--blue-subtle);
-  color: var(--blue);
-  border: 1px solid rgba(88, 184, 255, 0.35);
-}
-
-.ai-badge {
-  background: rgba(255, 48, 79, 0.15);
-  color: var(--red);
-  border: 1px solid rgba(255, 48, 79, 0.35);
-}
+.ring-badge { color: var(--blue-text); }
+.ai-badge { color: var(--red-text); }
 
 .live-pill {
   font-family: var(--font-mono);
-  font-size: 0.8vw;
-  color: var(--green);
+  font-size: 0.85vw;
   font-weight: 700;
+  background: var(--green-subtle);
+  color: var(--green);
+  border: 1px solid var(--green-border);
+  padding: 0.2vw 0.6vw;
+  border-radius: var(--radius-full);
 }
 
 .risk-pill.critical {
   font-family: var(--font-mono);
-  font-size: 0.8vw;
-  color: #fff;
-  background: var(--red);
-  padding: 0.15vw 0.5vw;
-  border-radius: 4px;
+  font-size: 0.85vw;
   font-weight: 700;
+  background: var(--red-subtle);
+  color: var(--red-text);
+  border: 1px solid var(--red-border);
+  padding: 0.2vw 0.6vw;
+  border-radius: var(--radius-full);
 }
 
-/* Snapshot Image with Baked-in Ring UI Cropped */
 .snapshot-wrapper {
   position: relative;
   width: 100%;
-  height: 12vw;
-  border-radius: var(--radius-sm);
+  height: 22vh;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  border: 1px solid var(--border);
-  margin-bottom: 0.6vw;
   background: #000;
+  border: 1px solid var(--border-card);
+  margin-bottom: 1vw;
 }
 
-.snapshot-wrapper img, #tv-snapshot-img {
+.snapshot-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 48%;
   transform: scale(1.22);
-  transform-origin: center center;
-  display: block;
 }
 
 .snapshot-overlay {
   position: absolute;
-  bottom: 0.6vw;
-  left: 0.6vw;
+  bottom: 0.8vw;
+  left: 0.8vw;
 }
 
 .verified-tag {
-  background: rgba(36, 217, 154, 0.95);
-  color: #032b13;
+  background: rgba(25, 38, 58, 0.88);
+  color: #FFFFFF;
+  padding: 0.3vw 0.7vw;
+  border-radius: var(--radius-sm);
+  font-size: 0.9vw;
   font-weight: 700;
-  font-size: 0.8vw;
-  padding: 0.2vw 0.6vw;
-  border-radius: 4px;
+  font-family: var(--font-mono);
 }
 
-/* Contradiction Hero Split Card */
+/* Contradiction Split Card (Caller Claims vs Ring Sensor Truth) */
 .contradiction-split-hero {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  align-items: stretch;
-  gap: 0.6vw;
-  background: var(--panel-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 0.6vw 0.8vw;
-  margin-bottom: 0.6vw;
+  align-items: center;
+  gap: 1vw;
+  background: #FFFFFF;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  padding: 1vw;
 }
 
 .split-col {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  border-radius: var(--radius-sm);
-  padding: 0.5vw 0.7vw;
+  gap: 0.3vw;
 }
 
-.split-col.claim-col {
-  background: rgba(255, 48, 79, 0.1);
-  border: 1px solid rgba(255, 48, 79, 0.3);
-  border-left: 3px solid var(--red);
-}
-
-.split-col.truth-col {
-  background: var(--green-subtle);
-  border: 1px solid rgba(36, 217, 154, 0.3);
-  border-left: 3px solid var(--green);
-}
-
-.split-col-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.3vw;
-  gap: 4px;
-}
-
-/* Prevent wrap on Ring sensor shows badge */
 .split-tag {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.75vw;
-  letter-spacing: 0.05em;
-  padding: 0.2vw 0.5vw;
-  border-radius: 3px;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
-}
-
-.split-tag.claim-tag {
-  background: rgba(255, 48, 79, 0.2);
-  color: #ff8a99;
-  border: 1px solid rgba(255, 48, 79, 0.4);
-}
-
-.split-tag.truth-tag {
-  background: rgba(36, 217, 154, 0.2);
-  color: #24D99A;
-  border: 1px solid rgba(36, 217, 154, 0.4);
-  white-space: nowrap;
-}
-
-.split-pill-sub {
-  font-family: var(--font-mono);
-  font-size: 0.65vw;
-  color: var(--muted);
-  font-weight: 700;
+  font-size: 0.85vw;
+  font-weight: 800;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
-  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.4vw;
 }
 
-.split-pill-sub.verified {
-  color: var(--blue);
-}
+.claim-tag { color: var(--red-text); }
+.truth-tag { color: var(--green); }
 
 .split-lead-text {
   font-family: var(--font-display);
-  font-size: 0.95vw;
+  font-size: 1.1vw;
   font-weight: 700;
-  color: #ffffff;
-  line-height: 1.25;
-  margin-bottom: 0.2vw;
+  color: var(--text-dark);
+  line-height: 1.2;
 }
 
-.split-lead-text.truth-accent {
-  color: #a7f3d0;
+.truth-accent {
+  color: var(--green);
 }
 
 .split-detail-text, .banner-desc {
-  font-size: 0.8vw;
-  color: var(--text-2);
+  font-size: 0.85vw;
+  color: var(--text-dark-sec);
   line-height: 1.3;
 }
 
@@ -460,297 +393,231 @@ body.tv-body {
 }
 
 .vs-circle {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 0.7vw;
-  color: var(--muted);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border);
-  width: 1.5vw;
-  height: 1.5vw;
+  width: 1.8vw;
+  height: 1.8vw;
   border-radius: 50%;
+  background: var(--red);
+  color: #FFFFFF;
+  font-size: 0.75vw;
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.6vw;
-}
-
-.metric-box {
-  background: var(--panel-2);
-  padding: 0.4vw;
-  border-radius: var(--radius-sm);
-  text-align: center;
-  border: 1px solid var(--border);
-}
-
-.m-val {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 1.4vw;
-  font-weight: 700;
-  color: var(--blue);
-}
-
-.m-lbl {
-  font-size: 0.75vw;
-  color: var(--muted);
-  font-weight: 500;
-}
-
-/* AI Intel Body */
+/* Intel / Protective Actions Card (Right) */
 .intel-body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  gap: 0.6vw;
+  gap: 1vw;
 }
 
 .signals-row {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1vw;
 }
 
 .signal-gauge {
-  background: var(--panel-2);
-  padding: 0.5vw 0.8vw;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
+  background: #FFFFFF;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  padding: 0.8vw 1vw;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3vw;
 }
 
 .gauge-title {
-  font-size: 0.8vw;
-  color: var(--muted);
-  margin-bottom: 0.2vw;
-  font-weight: 600;
+  font-size: 0.85vw;
+  font-weight: 700;
+  color: var(--text-dark-sec);
 }
 
 .gauge-bar-wrap {
   width: 100%;
-  height: 0.8vw;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--border);
+  height: 0.6vw;
+  background: var(--surface-subtle);
   border-radius: 50px;
   overflow: hidden;
-  margin-bottom: 0.2vw;
-  padding: 1px;
 }
 
-/* NO ORANGE/AMBER: Deepfake bar is RED */
-.gauge-bar.df-bar {
+.gauge-bar {
   height: 100%;
-  background: var(--red);
-  box-shadow: 0 0 10px rgba(255, 48, 79, 0.6);
-  border-radius: 50px;
 }
-
-.gauge-bar.coercion-bar {
-  height: 100%;
-  background: var(--red);
-  box-shadow: 0 0 10px rgba(255, 48, 79, 0.6);
-  border-radius: 50px;
-}
+.df-bar { background: var(--red); }
+.coercion-bar { background: var(--red); }
 
 .gauge-val {
-  font-size: 0.75vw;
+  font-size: 0.8vw;
   font-weight: 600;
-  color: var(--text-2);
+  color: var(--text-dark);
 }
 
+/* Active Protections on TV */
 .protection-status-box {
   display: flex;
   flex-direction: column;
-  gap: 0.4vw;
+  gap: 0.6vw;
 }
 
 .prot-item {
   display: flex;
   align-items: center;
-  gap: 0.6vw;
-  background: var(--green-subtle);
-  border: 1px solid rgba(36, 217, 154, 0.25);
-  padding: 0.4vw 0.7vw;
-  border-radius: var(--radius-sm);
+  gap: 0.9vw;
+  background: #FFFFFF;
+  border: 1px solid var(--border-card);
+  padding: 0.7vw 1vw;
+  border-radius: var(--radius-md);
 }
 
 .prot-icon {
-  color: var(--green);
+  color: var(--red);
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.prot-info {
+  display: flex;
+  flex-direction: column;
 }
 
 .prot-info strong {
-  display: block;
-  font-size: 0.8vw;
-  color: #fff;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 0.95vw;
+  color: var(--text-dark);
 }
 
 .prot-info span {
-  font-size: 0.7vw;
-  color: var(--text-2);
+  font-size: 0.8vw;
+  color: var(--text-dark-sec);
 }
 
+/* Helpline Banner */
 .helpline-box {
-  background: var(--panel-2);
-  border: 1px solid var(--blue);
-  box-shadow: 0 0 18px rgba(88, 184, 255, 0.25);
-  padding: 0.6vw 1.2vw;
-  border-radius: var(--radius-sm);
+  background: var(--red-subtle);
+  border: 1.5px solid var(--red-border);
+  border-radius: var(--radius-md);
+  padding: 0.8vw 1.2vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+.helpline-left {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8vw;
+}
+
 .helpline-lbl {
-  display: block;
-  font-size: 0.75vw;
-  color: var(--muted);
+  font-size: 0.85vw;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  color: var(--red-text);
 }
 
 .helpline-num {
   font-family: var(--font-display);
-  font-size: 2.2vw;
-  line-height: 1;
+  font-size: 1.6vw;
   font-weight: 800;
-  color: var(--blue);
-  letter-spacing: 0.04em;
+  color: var(--red);
 }
 
 .helpline-right {
+  font-size: 0.8vw;
+  color: var(--text-dark-sec);
   text-align: right;
-  font-size: 0.75vw;
-  color: var(--text-2);
 }
-
 .helpline-right strong {
+  color: var(--text-dark);
   display: block;
-  font-size: 0.9vw;
-  color: var(--blue);
 }
 
-/* ================= ACTIONS & REMOTE D-PAD ================= */
+/* TV D-Pad Remote Action Controls at Bottom */
 .takeover-actions {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.4vw;
-  padding: 0.8vw 1.5vw;
-  border-top: 1px solid var(--border);
-  box-sizing: border-box;
+  gap: 2vw;
+  border-top: 1px solid var(--border-tv);
+  padding-top: 1.5vh;
 }
 
 .dpad-hint {
   font-family: var(--font-mono);
-  font-size: 0.8vw;
-  color: var(--muted);
+  font-size: 0.9vw;
+  color: var(--text-light-muted);
   font-weight: 700;
 }
 
 .tv-btn {
-  font-family: var(--font-display);
-  font-size: 0.95vw;
-  font-weight: 700;
-  padding: 0.6vw 1.4vw;
-  border-radius: var(--radius-sm);
-  border: 2px solid transparent;
+  background: var(--panel-tv);
+  border: 2px solid var(--border-tv);
+  color: #FFFFFF;
+  padding: 0.8vw 1.8vw;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.6vw;
-  transition: all 0.15s ease;
-  outline: none;
-}
-
-.tv-btn.primary {
-  background: #ffffff;
-  color: #03080D;
-}
-
-.tv-btn.secondary {
-  background: var(--panel-2);
-  color: #ffffff;
-  border-color: var(--border);
-}
-
-.tv-btn.danger {
-  background: rgba(255, 48, 79, 0.15);
-  color: #ff6b7e;
-  border-color: rgba(255, 48, 79, 0.35);
-}
-
-.tv-btn.focused, .tv-btn:focus {
-  transform: translateY(-2px);
-  border-color: var(--blue);
-  box-shadow: 0 0 20px rgba(88, 184, 255, 0.6);
-}
-
-.keycap {
-  font-family: var(--font-mono);
-  font-size: 0.7vw;
-  font-weight: 800;
   display: inline-flex;
   align-items: center;
-  gap: 0.3vw;
-  padding: 0.2vw 0.5vw;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  line-height: 1;
-}
-
-.tv-btn.primary .keycap {
-  background: rgba(0, 0, 0, 0.12);
-  border-color: rgba(0, 0, 0, 0.2);
-  color: #03080D;
-}
-
-.btn-text {
-  font-size: 0.95vw;
-  font-weight: 700;
-}
-
-/* ================= IN-PAGE TV TOAST OVERLAY ================= */
-.tv-toast {
-  position: absolute;
-  bottom: 5vw;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--panel-2);
-  border: 2px solid var(--blue);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9), 0 0 20px rgba(88, 184, 255, 0.4);
-  border-radius: var(--radius);
-  padding: 1vw 2vw;
-  z-index: 2000;
-  text-align: center;
-  min-width: 400px;
-  max-width: 650px;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.tv-toast.hidden {
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, 15px);
-}
-
-.tv-toast-title {
+  gap: 0.8vw;
   font-family: var(--font-display);
   font-size: 1.1vw;
   font-weight: 700;
-  color: var(--text);
-  margin-bottom: 0.3vw;
+  outline: none;
+  transition: all 0.15s ease;
 }
 
+.tv-btn.focused, .tv-btn:focus {
+  border-color: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4);
+  transform: scale(1.04);
+}
+
+.tv-btn.primary {
+  background: var(--green);
+  border-color: var(--green);
+}
+.tv-btn.danger {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.keycap {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.2vw 0.5vw;
+  border-radius: 4px;
+  font-size: 0.75vw;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 0.3vw;
+}
+
+/* In-Page Toast */
+.tv-toast {
+  position: fixed;
+  bottom: 8vh;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #FFFFFF;
+  color: var(--text-dark);
+  padding: 1vw 2vw;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border-card);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  font-size: 1.1vw;
+  text-align: center;
+  z-index: 10000;
+}
+.tv-toast-title {
+  font-weight: 800;
+  margin-bottom: 0.2vw;
+}
 .tv-toast-message {
-  font-size: 0.9vw;
-  color: var(--text-2);
+  font-size: 0.95vw;
+  color: var(--text-dark-sec);
 }

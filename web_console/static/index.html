@@ -6,8 +6,8 @@
   <title>MIRAGE-SHIELD | Living Room Scam Defense Console</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/console/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/console/style.css?v=warm_redesign_1">
 </head>
 <body class="console-body">
   <div class="app-shell">
@@ -17,10 +17,10 @@
       <!-- Left: Logo & Wordmark -->
       <div class="top-bar-left">
         <div class="brand-emblem-box">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L3 6v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V6l-9-4z" stroke="#FF304F" stroke-width="1.75"/>
-            <path d="M7 12c1.5-3 3.5-4.5 5-4.5s3.5 1.5 5 4.5c-1.5 3-3.5 4.5-5 4.5S8.5 15 7 12z" stroke="#E8F0F8" stroke-width="1.5"/>
-            <circle cx="12" cy="12" r="2" fill="#FF304F"/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L3 6v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V6l-9-4z" stroke="#C93648" stroke-width="2"/>
+            <path d="M7 12c1.5-3 3.5-4.5 5-4.5s3.5 1.5 5 4.5c-1.5 3-3.5 4.5-5 4.5S8.5 15 7 12z" stroke="#FFFFFF" stroke-width="1.5"/>
+            <circle cx="12" cy="12" r="1.5" fill="#C93648"/>
           </svg>
         </div>
         <div class="brand-wordmark-group">
@@ -31,8 +31,9 @@
 
       <!-- Center: Distinctive Tagline -->
       <div class="top-bar-center">
-        <div class="tagline-line-1">Same Home. Different Stories.</div>
-        <div class="tagline-line-2">We Find The Truth.</div>
+        <div class="tagline-pill">
+          Same Home. Different Stories. · <strong>We Find The Truth.</strong>
+        </div>
       </div>
 
       <!-- Right: System Status, IST Clock & Avatar -->
@@ -46,7 +47,7 @@
         </div>
 
         <div class="top-ist-clock">
-          <span class="ist-date" id="ist-date">Thu, 23 Oct 2026</span>
+          <span class="ist-date" id="ist-date">Fri, 23 Oct 2026</span>
           <span class="ist-time" id="ist-time">14:32 IST</span>
         </div>
 
@@ -81,10 +82,11 @@
 
     <!-- ================= APP BODY ================= -->
     <div class="app-body">
-          <!-- ================= 2. LEFT SIDEBAR (~200px) ================= -->
+      
+      <!-- ================= 2. LEFT SIDEBAR (DEEP NAVY) ================= -->
       <aside class="sidebar">
         <nav class="sidebar-nav-list">
-          <button class="sidebar-nav-item active" type="button" onclick="document.getElementById('ring-panel').scrollIntoView({behavior:'smooth'})">
+          <button class="sidebar-nav-item active" type="button" onclick="document.getElementById('safety-hero-status').scrollIntoView({behavior:'smooth'})">
             <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             <span>Overview</span>
           </button>
@@ -92,19 +94,15 @@
             <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             <span>Live Evidence</span>
           </button>
-          <button class="sidebar-nav-item" type="button" onclick="document.getElementById('analysis-panel').scrollIntoView({behavior:'smooth'})">
+          <button class="sidebar-nav-item" type="button" onclick="toggleDetailedAnalysisDrawer(true)">
             <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 1v22"/><path d="M17 5v14"/><path d="M22 9v6"/><path d="M7 5v14"/><path d="M2 9v6"/></svg>
-            <span>Call Analysis</span>
+            <span>Incident Analysis</span>
           </button>
-          <button class="sidebar-nav-item" type="button" onclick="document.getElementById('response-panel').scrollIntoView({behavior:'smooth'})">
+          <button class="sidebar-nav-item" type="button" onclick="document.getElementById('protection-section').scrollIntoView({behavior:'smooth'})">
             <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             <span>Response Center</span>
           </button>
-          <button class="sidebar-nav-item" type="button" onclick="document.getElementById('incidents-panel').scrollIntoView({behavior:'smooth'})">
-            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-            <span>Incidents</span>
-          </button>
-          <button class="sidebar-nav-item" type="button" onclick="document.getElementById('audit-panel').scrollIntoView({behavior:'smooth'})">
+          <button class="sidebar-nav-item" type="button" onclick="document.getElementById('audit-section').scrollIntoView({behavior:'smooth'})">
             <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
             <span>Audit Ledger</span>
           </button>
@@ -112,6 +110,21 @@
 
         <!-- Sidebar Signature Block -->
         <div class="sidebar-footer-signature">
+          <div class="sidebar-house-mark">
+            <svg width="100%" height="52" viewBox="0 0 180 52" fill="none">
+              <ellipse cx="25" cy="30" rx="14" ry="16" fill="#20334D"/>
+              <ellipse cx="155" cy="30" rx="15" ry="16" fill="#20334D"/>
+              <ellipse cx="40" cy="32" rx="10" ry="13" fill="#2B4364"/>
+              <ellipse cx="140" cy="32" rx="12" ry="13" fill="#2B4364"/>
+              <path d="M0 48 Q90 38 180 48 L180 52 L0 52 Z" fill="#1C2D43"/>
+              <rect x="62" y="24" width="56" height="24" rx="2" fill="#F7F4EE" stroke="#3D597F" stroke-width="1.5"/>
+              <polygon points="58,24 90,10 122,24" fill="#E2DBD0" stroke="#3D597F" stroke-width="1.5"/>
+              <rect x="104" y="14" width="6" height="8" fill="#3D597F"/>
+              <rect x="85" y="34" width="10" height="14" rx="1" fill="#17263B"/>
+              <rect x="68" y="28" width="8" height="8" rx="1" fill="#C8DBF0"/>
+              <rect x="104" y="28" width="8" height="8" rx="1" fill="#C8DBF0"/>
+            </svg>
+          </div>
           <div class="sidebar-signature-title">REAL HOMES.<br>SAFER FAMILIES.</div>
           <div class="sidebar-signature-sub">AI + Physical Evidence against digital arrest scams.</div>
         </div>
@@ -120,18 +133,40 @@
       <!-- ================= 3. MAIN DASHBOARD VIEWPORT ================= -->
       <main class="main-viewport">
         
-        <!-- TIER 1: LIVE EVIDENCE | CLAIM VS REALITY | CALL ANALYSIS -->
-        <div class="tier-1-grid">
+        <!-- ================= A. COMPACT SAFETY STATUS BANNER ================= -->
+        <section class="safety-hero-card threat" id="safety-hero-status">
+          <div class="safety-hero-left">
+            <div class="safety-hero-icon-wrap" id="safety-hero-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div class="safety-hero-copy">
+              <span class="safety-hero-eyebrow">HOME SAFETY STATUS</span>
+              <h1 class="safety-hero-title" id="safety-hero-headline">Potential Scam Extortion Detected</h1>
+              <p class="safety-hero-sub" id="safety-hero-desc">Physical evidence contradicts caller claims. Living-room shields active.</p>
+            </div>
+          </div>
+          <div class="safety-hero-right">
+            <span class="live-systems-title">Live Systems</span>
+            <ul class="live-systems-list">
+              <li><span class="status-dot green" id="dot-ring"></span> Ring Doorbell</li>
+              <li><span class="status-dot green" id="dot-agent"></span> AI Agent</li>
+              <li><span class="status-dot red" id="dot-guard"></span> PaymentGuard</li>
+              <li><span class="status-dot green" id="dot-family"></span> Family Guardian</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- ================= B. MAIN EVIDENCE WORKSPACE (2-COLUMN HERO) ================= -->
+        <div class="evidence-workspace-grid">
           
-          <!-- PANEL 1: LIVE EVIDENCE (RING DOORBELL) -->
-          <section class="dashboard-card" id="ring-panel">
+          <!-- LEFT (60%): LIVE EVIDENCE (RING DOORBELL) -->
+          <section class="dashboard-card evidence-camera-card" id="ring-panel">
             <div class="card-header-row">
               <div class="card-title-group">
-                <span class="section-headline-bar"></span>
                 <span>Live Evidence</span>
-                <span style="color:var(--muted); font-size:10px;">• RING DOORBELL</span>
+                <span style="color:var(--text-muted); font-size:10.5px; font-weight:500;">• RING DOORBELL</span>
               </div>
-              <span class="badge-pill-live" id="ring-oracle-status-badge">● LIVE</span>
+              <span class="card-header-badge badge-live" id="ring-oracle-status-badge">● LIVE ENTRANCE</span>
             </div>
 
             <div class="evidence-media-wrap">
@@ -154,16 +189,18 @@
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
                 <span>Ring Video Doorbell Pro</span>
               </span>
-              <span style="font-family:var(--font-mono); font-size:9.5px; color:var(--muted);" id="door-hash-pill">SHA256: 9f83c18b...</span>
+              <span style="font-family:var(--font-mono); font-size:10px; color:var(--text-muted);" id="door-hash-pill">SHA256: 9f83c18b...</span>
             </div>
           </section>
 
-          <!-- PANEL 2: CLAIM VS REALITY -->
+          <!-- RIGHT (40%): CLAIM VS REALITY -->
           <section class="dashboard-card claim-reality-card">
             <div class="card-header-row">
               <div class="card-title-group">
                 <span>Claim vs Reality</span>
+                <span style="color:var(--text-muted); font-size:10.5px; font-weight:500;">• SENSOR TRUTH</span>
               </div>
+              <span class="card-header-badge badge-threat">CONTRADICTION</span>
             </div>
 
             <!-- Caller Claims -->
@@ -180,7 +217,9 @@
               </div>
             </div>
 
-            <div class="cvs-divider-line"></div>
+            <div class="cvs-connector-divider">
+              <div class="cvs-circle-x">✕</div>
+            </div>
 
             <!-- Ring Detects -->
             <div class="cvs-block ring-truth">
@@ -191,357 +230,245 @@
                 </div>
                 <div class="cvs-metric-group">
                   <span class="cvs-number"><span id="r-human-count">0</span> HUMANS</span>
-                  <span class="cvs-sub">detected</span>
+                  <span class="cvs-sub">detected at entrance</span>
                 </div>
               </div>
             </div>
 
-            <!-- PHYSICAL CONTRADICTION DETECTED - WITH HERO GLOW -->
+            <!-- PHYSICAL CONTRADICTION DETECTED -->
             <div class="contradiction-glow-box" id="oracle-verdict-callout">
-              <svg class="contra-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" style="margin-top:1px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
               <div>
                 <div class="contra-headline">PHYSICAL CONTRADICTION DETECTED</div>
                 <div class="contra-sub" id="oracle-contradiction-desc">0 people & 0 vehicles at entrance in past 6 hours.</div>
               </div>
-              <span class="callout-badge" style="display:none;"></span>
             </div>
           </section>
+        </div>
 
-          <!-- PANEL 3: CALL ANALYSIS (AI AGENT) -->
-          <section class="dashboard-card call-analysis-card" id="analysis-panel">
+        <!-- ================= C & D. LOWER TIER (INCIDENT ASSESSMENT & COMPACT PROTECTION) ================= -->
+        <div class="lower-tier-grid">
+          
+          <!-- LEFT: CONCISE INCIDENT ANALYSIS -->
+          <section class="dashboard-card concise-analysis-card" id="analysis-panel">
             <div class="card-header-row">
               <div class="card-title-group">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF304F" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <span>Call Analysis (AI Agent)</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C93648" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <span>Call Assessment (AI Agent)</span>
               </div>
               <div style="display:flex; align-items:center; gap:8px;">
-                <span class="badge-pill-threat" id="call-status-badge">● LIVE</span>
-                <span style="font-family:var(--font-mono); font-size:10px; color:var(--text-2);" id="call-duration-timer">00:01:24</span>
+                <span class="card-header-badge badge-threat" id="call-status-badge">● LIVE</span>
+                <span style="font-family:var(--font-mono); font-size:10px; color:var(--text-secondary);" id="call-duration-timer">00:01:24</span>
               </div>
             </div>
 
-            <!-- Quote Snippet with Audio Icon -->
-            <div class="transcript-quote-box">
-              <svg class="quote-waveform-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5v14M22 9v6M7 5v14M2 9v6"/></svg>
-              <div class="quote-text" id="transcript-quote">
+            <!-- Quote Snippet with Waveform -->
+            <div class="quote-snippet-box">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C93648" stroke-width="2"><path d="M12 1v22M17 5v14M22 9v6M7 5v14M2 9v6"/></svg>
+              <div class="quote-snippet-text" id="transcript-quote">
                 “Armed police are outside your door. Transfer ₹4,50,000 now.”
               </div>
-              <svg width="34" height="34" viewBox="0 0 36 36" fill="none" stroke="#FF304F" stroke-width="1.2" opacity="0.8">
-                <circle cx="18" cy="18" r="14" stroke-dasharray="2 2"/>
-                <circle cx="14" cy="15" r="2"/>
-                <circle cx="22" cy="15" r="2"/>
-                <path d="M14 23c2 2 6 2 8 0"/>
-              </svg>
             </div>
 
-            <!-- Threat Tag Chips -->
-            <div class="threat-chips-bar" id="detected-phrases-list">
-              <span class="threat-chip">Digital Arrest</span>
-              <span class="threat-chip">Coercion</span>
-              <span class="threat-chip">Isolation Tactic</span>
-              <span class="threat-chip">Fake Authority</span>
-            </div>
-
-            <!-- Tab Row -->
-            <div class="analysis-tab-row">
-              <div class="tab-group-left">
-                <button class="ana-tab-btn" type="button" onclick="toggleVictimPhoneDrawer(true)">Transcript</button>
-                <button class="ana-tab-btn active" type="button">Analysis</button>
-                <button class="ana-tab-btn" type="button">Indicators</button>
+            <!-- Key Metrics Strip -->
+            <div class="analysis-key-metrics">
+              <div class="key-metric-item">
+                <span class="key-metric-label">Risk Level</span>
+                <span class="key-metric-value" style="color:var(--red);" id="coercion-score-badge">CRITICAL</span>
               </div>
-              <button class="phone-view-toggle-btn" type="button" onclick="toggleVictimPhoneDrawer()">
-                📱 Phone Screen
-              </button>
+              <div class="key-metric-item">
+                <span class="key-metric-label">Deepfake Score</span>
+                <span class="key-metric-value"><span id="df-score-number">0.92</span> <span style="font-size:9px; color:var(--text-muted);">/ 1.00</span></span>
+              </div>
+              <div class="key-metric-item">
+                <span class="key-metric-label">Primary Tactic</span>
+                <span class="key-metric-value" style="font-size:11px;">Extortion & Fake Police</span>
+              </div>
             </div>
 
-            <!-- Analysis Split View: Checklist + Deepfake Score -->
-            <div class="analysis-split-view">
-              <!-- Left: 4 Checklist items -->
-              <div class="coercion-checklist">
-                <div class="checklist-item">
-                  <div class="checklist-left">
-                    <svg class="check-ico-danger" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                    <div class="check-text-group">
-                      <span class="check-title">Coercion / Threat Language</span>
-                      <span class="check-sub">Detected (arrest, immediate action)</span>
-                    </div>
-                  </div>
-                  <span class="severity-pill-high" id="coercion-score-badge">HIGH</span>
-                </div>
+            <button class="inspect-analysis-btn" type="button" onclick="toggleDetailedAnalysisDrawer(true)">
+              <span>Inspect Full Analysis & Transcript →</span>
+            </button>
+          </section>
 
-                <div class="checklist-item">
-                  <div class="checklist-left">
-                    <svg class="check-ico-danger" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                    <div class="check-text-group">
-                      <span class="check-title">Isolation Language</span>
-                      <span class="check-sub">Detected (stay in room, don't tell anyone)</span>
-                    </div>
-                  </div>
-                  <span class="severity-pill-high">HIGH</span>
-                </div>
+          <!-- RIGHT: COMPACT PROTECTION STATUS -->
+          <section class="dashboard-card compact-protection-card" id="protection-section">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                <span>Protection Status (4 Living-Room Shields)</span>
+              </div>
+              <span class="card-header-badge badge-threat">4 ACTIVE</span>
+            </div>
 
-                <div class="checklist-item">
-                  <div class="checklist-left">
-                    <svg class="check-ico-danger" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                    <div class="check-text-group">
-                      <span class="check-title">Fake Authority Claim</span>
-                      <span class="check-sub">Detected (police, customs, RBI)</span>
-                    </div>
+            <div class="protection-rows-group">
+              <!-- ROW 1: FIRE TV -->
+              <div class="protection-compact-row">
+                <div class="prot-left-group">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+                  <div>
+                    <span class="prot-row-title">Fire TV Takeover</span>
+                    <span class="prot-row-desc" id="tv-takeover-title" style="margin-left:6px; color:var(--text-secondary);">Ready to display live evidence</span>
                   </div>
-                  <span class="severity-pill-high">HIGH</span>
                 </div>
-
-                <div class="checklist-item">
-                  <div class="checklist-left">
-                    <svg class="check-ico-danger" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                    <div class="check-text-group">
-                      <span class="check-title">Suspicious Script Pattern</span>
-                      <span class="check-sub">Matches known scam templates</span>
-                    </div>
-                  </div>
-                  <span class="severity-pill-high">HIGH</span>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span class="prot-pill active" id="tv-status-chip">● ACTIVE</span>
+                  <button class="prot-action-btn" type="button" onclick="openTakeoverModal()">Launch TV</button>
+                  <a href="/firetv" target="_blank" class="prot-action-btn" style="text-decoration:none;">10-Foot ↗</a>
                 </div>
               </div>
 
-              <!-- Right: Deepfake Hero Score & Waveform -->
-              <div class="deepfake-subpanel">
-                <div>
-                  <div class="df-title">Deepfake Score (face + voice)</div>
-                  <div class="df-hero-score"><span id="df-score-number">0.92</span> <span>/ 1.00</span></div>
-                  <div class="df-progress-track">
-                    <div class="df-progress-bar" id="df-progress-bar"></div>
-                  </div>
-                  <div class="df-sublabel">Likely AI-generated or spoofed</div>
-                  <div class="honest-scope-chip" id="deepfake-tag">
-                    <span id="df-percentage">Deepfake analysis simulated</span>
+              <!-- ROW 2: RING CHIME -->
+              <div class="protection-compact-row">
+                <div class="prot-left-group">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                  <div>
+                    <span class="prot-row-title">Ring Chime</span>
+                    <span class="prot-row-desc" id="r-chime-status" style="margin-left:6px; color:var(--text-secondary);">Alert Sounding [SIMULATED CHIME]</span>
                   </div>
                 </div>
+                <span class="prot-pill active" id="chime-chip">● ACTIVE</span>
+              </div>
 
-                <div class="live-audio-waveform-row" id="waveform-bar">
-                  <div class="audio-bars-anim">
-                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+              <!-- ROW 3: PAYMENTGUARD -->
+              <div class="protection-compact-row">
+                <div class="prot-left-group">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                  <div>
+                    <span class="prot-row-title">PaymentGuard</span>
+                    <span class="prot-row-desc" id="payment-status-display" style="margin-left:6px; color:var(--text-secondary);">Transfers Frozen [Simulated Gateway]</span>
                   </div>
-                  <span class="live-trans-tag">Live Transcription</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span class="prot-pill active" id="bank-frozen-badge">● FROZEN</span>
+                  <button class="prot-action-btn" id="btn-attempt-payment" type="button" onclick="attemptPayment()">Attempt Transfer</button>
+                </div>
+              </div>
+
+              <!-- ROW 4: FAMILY GUARDIAN -->
+              <div class="protection-compact-row">
+                <div class="prot-left-group">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  <div>
+                    <span class="prot-row-title">Family Guardian</span>
+                    <span class="prot-row-desc" id="family-sms-body" style="margin-left:6px; color:var(--text-secondary);">SMS Dispatched to 2 family members</span>
+                  </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <span class="prot-pill active" id="family-status-badge">● SENT</span>
+                  <button class="prot-action-btn" id="btn-approve-cosign" type="button" onclick="approveCosign()">Co-Sign</button>
+                  <button class="prot-action-btn" id="btn-reject-cosign" type="button" onclick="rejectPayment()">Reject</button>
                 </div>
               </div>
             </div>
           </section>
         </div>
 
-        <!-- TIER 2: AUTOMATED RESPONSE (4 LIVING-ROOM SHIELDS) -->
-        <section class="response-row-container" id="response-panel">
-          <div class="section-headline-row">
-            <span class="section-headline-bar"></span>
-            <span>Automated Response (4 Living-Room Shields)</span>
-          </div>
-
-          <div class="response-deck">
-            <!-- MODULE 1: FIRE TV -->
-            <div class="response-module-card">
-              <div class="module-header">
-                <div class="module-id-group">
-                  <svg class="module-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
-                  <span class="module-name">FIRE TV</span>
-                </div>
-                <span class="module-status-chip ready" id="tv-status-chip">● READY</span>
-              </div>
-              <div class="module-action-title" id="tv-takeover-title">Takeover Ready</div>
-              <p class="module-desc" id="tv-takeover-subtitle">Display alert with live evidence & 1930 helpline. Fire TV Simulator (Vega OS)</p>
-              <div class="module-actions-row">
-                <button class="module-btn-subtle" type="button" onclick="openTakeoverModal()">Launch TV Overlay</button>
-                <a href="/firetv" target="_blank" class="module-btn-subtle" style="text-align:center; text-decoration:none;">10-Foot View ↗</a>
-              </div>
-            </div>
-
-            <!-- MODULE 2: RING CHIME -->
-            <div class="response-module-card">
-              <div class="module-header">
-                <div class="module-id-group">
-                  <svg class="module-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-                  <span class="module-name">RING CHIME</span>
-                </div>
-                <span class="module-status-chip ready" id="chime-chip">● READY</span>
-              </div>
-              <div class="module-action-title" id="r-chime-status">Alert Queued</div>
-              <p class="module-desc">Play urgent security alert on scam detection. [SIMULATED CHIME]</p>
-              <div class="module-actions-row">
-                <span style="font-size:9.5px; color:var(--muted); line-height:22px;">Synced with living room chime</span>
-              </div>
-            </div>
-
-            <!-- MODULE 3: PAYMENTGUARD -->
-            <div class="response-module-card">
-              <div class="module-header">
-                <div class="module-id-group">
-                  <svg class="module-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                  <span class="module-name">PAYMENTGUARD</span>
-                </div>
-                <span class="module-status-chip active" id="bank-frozen-badge">● ACTIVE</span>
-              </div>
-              <div class="module-action-title alert">Transfers Frozen</div>
-              <p class="module-desc" id="payment-status-display">Outgoing UPI/bank transfers blocked immediately. [Simulated Gateway]</p>
-              <div class="module-actions-row">
-                <button class="module-btn-subtle" id="btn-attempt-payment" type="button" onclick="attemptPayment()">Attempt Payment</button>
-              </div>
-            </div>
-
-            <!-- MODULE 4: FAMILY GUARDIAN -->
-            <div class="response-module-card">
-              <div class="module-header">
-                <div class="module-id-group">
-                  <svg class="module-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                  <span class="module-name">FAMILY GUARDIAN</span>
-                </div>
-                <span class="module-status-chip sent" id="family-status-badge">● SENT</span>
-              </div>
-              <div class="module-action-title">SMS Alert</div>
-              <p class="module-desc" id="family-sms-body">Alert sent to 2 family members with incident details. SIMULATED SMS</p>
-              <div class="module-actions-row">
-                <button class="module-btn-subtle" id="btn-approve-cosign" type="button" onclick="approveCosign()">Family Co-Sign</button>
-                <button class="module-btn-subtle" id="btn-reject-cosign" type="button" onclick="rejectPayment()">Reject</button>
-              </div>
-              <div style="font-size:9px; color:var(--muted); margin-top:2px;" id="cosign-result-text">Current Status: Transfers Frozen by Policy</div>
-            </div>
-          </div>
-        </section>
-
-        <!-- TIER 3: RECENT INCIDENTS | AUDIT & INTEGRITY -->
-        <div class="tier-3-grid">
+        <!-- ================= E. RESTRAINED RECENT ACTIVITY & AUDIT STRIP ================= -->
+        <div class="recent-activity-strip" id="audit-section">
           
-          <!-- LEFT: RECENT INCIDENTS -->
-          <section class="incidents-card" id="incidents-panel">
-            <div class="incidents-header-row">
-              <div class="card-title-group">
-                <span class="section-headline-bar"></span>
-                <span>Recent Incidents →</span>
+          <!-- Recent Activity Strip -->
+          <div class="activity-strip-card">
+            <div class="activity-strip-left">
+              <div class="activity-ico-circle">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
               </div>
-              <span style="font-size:10px; color:var(--muted); cursor:pointer;">View all →</span>
-            </div>
-
-            <div class="incidents-table" id="incidents-table-body">
-              <!-- Dynamically populated or rendered -->
-              <div class="incident-row">
-                <div class="inc-ico-circle red">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                </div>
-                <div class="inc-main">
-                  <span class="inc-title">Digital arrest attempt</span>
-                  <span class="inc-sub">Scam call with fake police claim</span>
-                </div>
-                <span class="inc-time">14:32<br>23 Oct 2026</span>
-                <span class="inc-badge-pill danger">HIGH RISK</span>
-                <span class="inc-meta-ring">Ring: 0 humans</span>
-                <span class="inc-meta-extra">Deepfake: 0.92</span>
-                <span class="inc-arrow">›</span>
-              </div>
-
-              <div class="incident-row">
-                <div class="inc-ico-circle green">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-                </div>
-                <div class="inc-main">
-                  <span class="inc-title">Family video call</span>
-                  <span class="inc-sub">Sister video call (Chennai)</span>
-                </div>
-                <span class="inc-time">13:08<br>23 Oct 2026</span>
-                <span class="inc-badge-pill safe">VERIFIED SAFE</span>
-                <span class="inc-meta-ring">Ring: 1 human</span>
-                <span class="inc-meta-extra">Normal call</span>
-                <span class="inc-arrow">›</span>
-              </div>
-
-              <div class="incident-row">
-                <div class="inc-ico-circle blue">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-                </div>
-                <div class="inc-main">
-                  <span class="inc-title">Courier arrival</span>
-                  <span class="inc-sub">Amazon delivery (package detected)</span>
-                </div>
-                <span class="inc-time">12:41<br>23 Oct 2026</span>
-                <span class="inc-badge-pill delivery">VERIFIED DELIVERY</span>
-                <span class="inc-meta-ring">Ring: 1 human</span>
-                <span class="inc-meta-extra">Package detected</span>
-                <span class="inc-arrow">›</span>
+              <div class="activity-main-text">
+                <span class="activity-headline">Latest Incident: Digital Arrest Attempt</span>
+                <span class="activity-sub">Fake police claim refuted by Ring Doorbell Oracle</span>
               </div>
             </div>
-          </section>
+            <div class="activity-strip-right">
+              <span class="strip-time">14:32 · 23 Oct 2026</span>
+              <span class="card-header-badge badge-threat">HIGH RISK</span>
+            </div>
+          </div>
 
-          <!-- RIGHT: AUDIT & INTEGRITY -->
-          <section class="audit-integrity-card" id="audit-panel">
-            <div class="card-header-row">
-              <div class="card-title-group">
-                <span class="section-headline-bar"></span>
-                <span>Audit & Integrity</span>
+          <!-- Audit & Integrity Strip -->
+          <div class="audit-strip-card">
+            <div class="audit-strip-left">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#248365" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+              <div>
+                <span style="font-weight:700; font-size:11px; color:var(--text-primary);" id="audit-system-mode">LOCAL_HMAC_SHA256_SANDBOX</span>
+                <div style="font-size:9.5px; color:var(--text-secondary);">Cryptographic Proof Ledger</div>
               </div>
             </div>
-
-            <div class="audit-lead-box">
-              <svg class="audit-shield-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-              <div class="audit-lead-text">
-                <span class="audit-system-title" id="audit-system-mode">LOCAL_HMAC_SHA256_SANDBOX</span>
-                <span class="audit-system-sub">All events are cryptographically signed and stored in immutable ledger.</span>
-              </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <code class="audit-hash-snippet" id="kms-sig-display">3f9a6c7e...d2b4e1f0</code>
+              <button class="prot-action-btn" id="btn-copy-hash" type="button" title="Copy audit hash" onclick="copyAuditHash()">Copy</button>
             </div>
-
-            <div class="audit-hash-container">
-              <span class="audit-hash-header">Latest Event Hash</span>
-              <div class="audit-hash-row">
-                <code class="audit-hash-code" id="kms-sig-display">3f9a6c7e...d2b4e1f0</code>
-                <button class="copy-hash-btn" id="btn-copy-hash" type="button" title="Copy to clipboard" onclick="copyAuditHash()">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="audit-footer-row">
-              <span style="color:var(--green); font-size:9.5px; font-weight:600;" id="verify-status-text">Signature Verified Valid</span>
-              <a href="#" class="audit-ledger-link" onclick="toggleDiagnosticsTray(); return false;">Open full evidence ledger →</a>
-            </div>
-          </section>
+          </div>
         </div>
 
       </main>
     </div>
 
-    <!-- ================= VICTIM PHONE DRAWER (EXPANDABLE/EMBEDDED) ================= -->
-    <div class="victim-phone-drawer" id="victim-phone-drawer">
-      <div class="phone-top-bar">
-        <span style="font-weight:600; color:#fff;" id="phone-status-time">14:32</span>
-        <span style="color:var(--muted); font-size:10px;">STAGED CALL</span>
-        <button type="button" onclick="toggleVictimPhoneDrawer(false)" style="background:transparent; border:none; color:var(--muted); cursor:pointer;">✕</button>
+    <!-- ================= SECONDARY DETAILED ANALYSIS DRAWER ================= -->
+    <div class="detailed-analysis-drawer" id="detailed-analysis-drawer">
+      <div class="drawer-header">
+        <div class="drawer-title">Detailed Incident Intelligence</div>
+        <button class="drawer-close-btn" type="button" onclick="toggleDetailedAnalysisDrawer(false)">✕</button>
       </div>
 
-      <div class="phone-screen-embed">
-        <div class="phone-video-wrap">
-          <img id="call-video-feed" src="/static/images/scam_officer_call.jpg" alt="Victim Phone Screen">
-          <div class="phone-staged-chip">STAGED CALL</div>
-          <div class="phone-caller-info">
-            <div class="phone-caller-name">
-              <span id="caller-name-display">ACP Vikram Rathore</span>
-              <span class="call-timer-pill" style="font-size:10px; color:var(--blue);">00:01:24</span>
+      <div class="drawer-body">
+        <!-- Caller Video Feed Preview -->
+        <div>
+          <span class="drawer-section-title">STAGED VIDEO CALL FEED</span>
+          <div class="drawer-call-wrap">
+            <div class="drawer-caller-avatar">
+              <img id="call-video-feed" src="/static/images/scam_officer_call.jpg" alt="Caller Video Snapshot">
             </div>
-            <div class="phone-caller-org" id="caller-org-display">Crime Branch / Mumbai Narcotics</div>
+            <div>
+              <div style="font-weight:700; font-size:13px; color:var(--text-primary);" id="caller-name-display">ACP Vikram Rathore</div>
+              <div style="font-size:11px; color:var(--text-secondary);" id="caller-org-display">Crime Branch / Mumbai Narcotics</div>
+              <div style="margin-top:4px;" class="drawer-threat-chip" id="deepfake-tag">Deepfake analysis simulated</div>
+            </div>
           </div>
         </div>
 
-        <!-- Phone decorative controls -->
-        <div class="phone-call-btns-row" aria-hidden="true">
-          <div class="phone-btn-circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></div>
-          <div class="phone-btn-circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
-          <div class="phone-btn-circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="4" height="4"/><rect x="10" y="3" width="4" height="4"/><rect x="17" y="3" width="4" height="4"/><rect x="3" y="10" width="4" height="4"/><rect x="10" y="10" width="4" height="4"/><rect x="17" y="10" width="4" height="4"/></svg></div>
-          <div class="phone-btn-circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></div>
-          <div class="phone-btn-circle end-call"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"/></svg></div>
-        </div>
-
-        <!-- Phone Transcript Caption Lines -->
-        <div class="phone-caption-box">
-          <div style="font-size:9px; color:var(--muted); margin-bottom:4px; font-weight:600;">LIVE CLOSED CAPTION:</div>
-          <div id="transcript-content">
+        <!-- Live Closed Caption Transcript -->
+        <div>
+          <span class="drawer-section-title">LIVE CLOSED CAPTION TRANSCRIPT</span>
+          <div class="drawer-transcript-box" id="transcript-content">
             "Officers have been dispatched and are standing outside your front door right now. Transfer ₹4,50,000 to the RBI verification escrow account immediately or our team will break the door!"
           </div>
         </div>
+
+        <!-- Detected Coercion Phrases -->
+        <div>
+          <span class="drawer-section-title">DETECTED EXTORTION PHRASES</span>
+          <div class="drawer-threat-chips" id="detected-phrases-list">
+            <span class="drawer-threat-chip">Digital Arrest</span>
+            <span class="drawer-threat-chip">Coercion Demand</span>
+            <span class="drawer-threat-chip">Isolation Tactic</span>
+            <span class="drawer-threat-chip">Fake Police Warrant</span>
+          </div>
+        </div>
+
+        <!-- Threat Indicators Checklist -->
+        <div>
+          <span class="drawer-section-title">SECURITY ANALYSIS CHECKLIST</span>
+          <div class="drawer-checklist">
+            <div class="drawer-check-item">
+              <span style="font-weight:600; font-size:11px;">Coercion / Threat Language</span>
+              <span class="prot-pill active">HIGH</span>
+            </div>
+            <div class="drawer-check-item">
+              <span style="font-weight:600; font-size:11px;">Isolation Demands (Room Lock)</span>
+              <span class="prot-pill active">HIGH</span>
+            </div>
+            <div class="drawer-check-item">
+              <span style="font-weight:600; font-size:11px;">Fake Law Enforcement Claim</span>
+              <span class="prot-pill active">HIGH</span>
+            </div>
+            <div class="drawer-check-item">
+              <span style="font-weight:600; font-size:11px;">Doorbell Physical Contradiction</span>
+              <span class="prot-pill active">PROVEN CONTRADICTION</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="prot-action-btn" type="button" style="padding:8px; width:100%; font-weight:700;" onclick="toggleDetailedAnalysisDrawer(false)">Close Analysis Drawer</button>
       </div>
     </div>
 
@@ -557,41 +484,41 @@
         </div>
 
         <div class="takeover-content-body">
-          <div style="text-align:center; padding:10px 0;">
-            <span style="background:rgba(255,48,79,0.2); color:#ff6b7e; border:1px solid var(--red); padding:3px 10px; border-radius:4px; font-size:11px; font-weight:700;">
+          <div style="text-align:center; padding:8px 0;">
+            <span style="background:var(--red-subtle); color:var(--red-text); border:1px solid var(--red-border); padding:3px 10px; border-radius:4px; font-size:11px; font-weight:700;">
               🚨 DIGITAL ARREST SCAM DETECTED · HANG UP IMMEDIATELY
             </span>
-            <div style="font-size:18px; font-weight:800; color:#fff; margin-top:8px;">
+            <div style="font-size:16px; font-weight:800; color:var(--text-primary); margin-top:8px;">
               Indian Law Enforcement never conducts arrests or trials over video calls.
             </div>
           </div>
 
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-            <div style="border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); max-height:220px; background:#000;">
+            <div style="border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); max-height:200px; background:#000;">
               <img src="/static/images/scenario1_empty_porch.jpg" alt="Front Porch" style="width:100%; height:100%; object-fit:cover;">
             </div>
-            <div style="display:flex; flex-direction:column; justify-content:center; gap:10px; background:var(--panel-2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px;">
+            <div style="display:flex; flex-direction:column; justify-content:center; gap:10px; background:var(--bg-surface-subtle); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px;">
               <div>
-                <span style="font-size:10px; color:#ff6b7e; font-weight:700;">CALLER CLAIMS:</span>
-                <div style="font-size:14px; font-weight:700; color:#fff;">"Armed police outside your door"</div>
+                <span style="font-size:10px; color:var(--red); font-weight:700;">CALLER CLAIMS:</span>
+                <div style="font-size:13px; font-weight:700; color:var(--text-primary);">"Armed police outside your door"</div>
               </div>
               <div style="height:1px; background:var(--border);"></div>
               <div>
                 <span style="font-size:10px; color:var(--green); font-weight:700;">RING SENSOR SHOWS:</span>
-                <div style="font-size:14px; font-weight:700; color:#fff;">Porch clear · 0 people · 0 vehicles</div>
+                <div style="font-size:13px; font-weight:700; color:var(--text-primary);">Porch clear · 0 people · 0 vehicles</div>
               </div>
             </div>
           </div>
 
-          <div style="display:flex; justify-content:center; gap:12px; margin-top:8px;">
-            <button class="scen-btn active" style="padding:8px 16px; font-weight:700;" type="button" onclick="dial1930()">
-              📞 Dial 1930 Cyber Helpline
+          <div style="display:flex; justify-content:center; gap:10px; margin-top:8px;">
+            <button class="scen-btn active" style="padding:6px 14px; font-weight:700;" type="button" onclick="dial1930()">
+              📞 Dial 1930 Helpline
             </button>
-            <button class="scen-btn" style="padding:8px 16px; background:#fff; color:#03080D; font-weight:700;" type="button" onclick="endCallAndProtect()">
-              ✔ End Call & Protect Account
+            <button class="scen-btn" style="padding:6px 14px; background:var(--green); color:#fff; font-weight:700; border-color:var(--green);" type="button" onclick="endCallAndProtect()">
+              ✔ End Call & Protect
             </button>
-            <button class="scen-btn" style="padding:8px 16px;" type="button" onclick="closeTakeoverModal()">
-              Dismiss Overlay
+            <button class="scen-btn" style="padding:6px 14px;" type="button" onclick="closeTakeoverModal()">
+              Dismiss
             </button>
           </div>
         </div>
@@ -599,7 +526,6 @@
     </div>
 
     <!-- ================= LEGACY PRESERVE DOM LAYER ================= -->
-    <!-- Preserves all element IDs required by app.js, tests, and API watchers -->
     <div class="dom-legacy-preserve" aria-hidden="true">
       <span id="door-status-pill">CLEAR</span>
       <span id="r-pkg-count">0</span>
@@ -608,8 +534,8 @@
       <span id="tel-agent">LOCAL RULE HEURISTIC</span>
       <span id="tel-agent-dot" class="dot green"></span>
       <span id="coercion-subbox"></span>
-      <button id="tray-toggle-btn" onclick="toggleDiagnosticsTray()"></button>
-      <button id="drawer-toggle-btn" onclick="toggleDiagnosticsTray()"></button>
+      <button id="tray-toggle-btn" onclick="toggleDetailedAnalysisDrawer()"></button>
+      <button id="drawer-toggle-btn" onclick="toggleDetailedAnalysisDrawer()"></button>
       <span id="tray-chevron">▾</span>
       <span id="drawer-chevron">▾</span>
       <div id="diagnostics-drawer" class="collapsed">
@@ -619,6 +545,14 @@
         <span id="ring-device-id-chip"></span>
       </div>
       <iframe src="/firetv" id="tv-iframe"></iframe>
+      <span id="tv-takeover-subtitle"></span>
+      <div id="df-progress-bar"></div>
+      <div id="df-svg-ring"></div>
+      <span id="df-percentage">Deepfake analysis simulated</span>
+      <span id="phone-status-time">14:32</span>
+      <div id="incidents-table-body"></div>
+      <span id="verify-status-text">Signature Verified Valid</span>
+      <span id="cosign-result-text">Transfers Frozen</span>
     </div>
 
     <!-- In-page Toast Notification -->
@@ -633,6 +567,6 @@
 
   </div>
 
-  <script src="/console/app.js"></script>
+  <script src="/console/app.js?v=warm_redesign_1"></script>
 </body>
 </html>
