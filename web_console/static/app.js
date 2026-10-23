@@ -44,7 +44,31 @@ const tvTakeoverSubtitle = document.getElementById('tv-takeover-subtitle');
 const ringOracleBadge = document.getElementById('ring-oracle-badge');
 const bankFrozenBadge = document.getElementById('bank-frozen-badge');
 
-// Diagnostics Tray Toggle (Header button & Bottom drawer toggle)
+// IST Live Clock Controller
+function updateISTClock() {
+  const dateEl = document.getElementById('ist-date');
+  const timeEl = document.getElementById('ist-time');
+  const phoneClock = document.getElementById('phone-status-time');
+  const ringTimestamp = document.getElementById('ring-feed-timestamp');
+  
+  const now = new Date();
+  const optionsDate = { weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' };
+  const optionsTime = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Kolkata' };
+  const optionsSec = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'Asia/Kolkata' };
+  
+  const dateStr = now.toLocaleDateString('en-GB', optionsDate);
+  const timeStr = now.toLocaleTimeString('en-GB', optionsTime);
+  const timeWithSec = now.toLocaleTimeString('en-GB', optionsSec);
+
+  if (dateEl) dateEl.textContent = dateStr;
+  if (timeEl) timeEl.textContent = `${timeStr} IST`;
+  if (phoneClock) phoneClock.textContent = timeStr;
+  if (ringTimestamp) ringTimestamp.textContent = `${dateStr} ${timeWithSec}`;
+}
+setInterval(updateISTClock, 1000);
+updateISTClock();
+
+// Diagnostics Tray Toggle
 function toggleDiagnosticsTray() {
   const drawer = document.getElementById('diagnostics-drawer');
   const btn = document.getElementById('tray-toggle-btn');
@@ -79,9 +103,31 @@ function appendRingLog(type, text) {
   ringActivityLog.scrollTop = ringActivityLog.scrollHeight;
 }
 
+// Live Call Duration Timer
+let callElapsedSeconds = 84;
+let callTimerInterval = null;
+
+function startCallTimer() {
+  callElapsedSeconds = 0;
+  if (callTimerInterval) clearInterval(callTimerInterval);
+  const timerEl = document.getElementById('call-duration-timer');
+  
+  function tick() {
+    callElapsedSeconds++;
+    if (timerEl) {
+      const mins = String(Math.floor(callElapsedSeconds / 60)).padStart(2, '0');
+      const secs = String(callElapsedSeconds % 60).padStart(2, '0');
+      timerEl.textContent = `00:${mins}:${secs}`;
+    }
+  }
+  tick();
+  callTimerInterval = setInterval(tick, 1000);
+}
+
 // Run Scenario
 async function runScenario(scenarioId) {
   currentScenarioId = scenarioId;
+  startCallTimer();
   
   // Highlight active button
   [1, 2, 3].forEach(id => {
@@ -93,205 +139,399 @@ async function runScenario(scenarioId) {
     const res = await fetch(`/api/scenario/${scenarioId}`, { method: 'POST' });
     const data = await res.json();
     applyScenarioUI(data);
+    loadRecentIncidents();
   } catch (err) {
     console.error("Error setting scenario:", err);
   }
 }
 
 function applyScenarioUI(data) {
-  const cRisk = data.call_risk;
-  const dEvidence = data.door_evidence;
-  const vVerdict = data.verdict;
+  const cRisk = data.call_risk || {};
+  const dEvidence = data.door_evidence || {};
+  const vVerdict = data.verdict || {};
 
   // Refresh TV embed
-  if (tvIframe) {
-    tvIframe.contentWindow.location.reload();
+  if (tvIframe && tvIframe.contentWindow) {
+    try { tvIframe.contentWindow.location.reload(); } catch(_) {}
   }
 
-  // Update Telemetry Bar Agent Engine dynamically
-  const telAgent = document.getElementById('tel-agent');
-  const telAgentDot = document.getElementById('tel-agent-dot');
-  if (telAgent && vVerdict && vVerdict.reasoning_engine) {
-    if (vVerdict.reasoning_engine.includes('Bedrock Converse')) {
-      telAgent.textContent = 'AMAZON BEDROCK CONVERSE';
-      if (telAgentDot) telAgentDot.className = 'dot green';
-    } else {
-      telAgent.textContent = 'LOCAL RULE HEURISTIC';
-      if (telAgentDot) telAgentDot.className = 'dot yellow';
-    }
-  }
+  // Update Dynamic Claim vs Reality Fields
+  const claimCountEl = document.getElementById('claim-count');
+  const claimSubEl = document.getElementById('claim-sub');
+  const transcriptQuoteEl = document.getElementById('transcript-quote');
+  const dfScoreNumber = document.getElementById('df-score-number');
+  const dfProgressBar = document.getElementById('df-progress-bar');
+  const tvStatusChip = document.getElementById('tv-status-chip');
+  const chimeChip = document.getElementById('chime-chip');
 
   // Update Dynamic Regex Coercion Classifier Output & Phrases
-  if (coercionScoreBadge && detectedPhrasesList && cRisk) {
+  if (coercionScoreBadge && cRisk) {
     const cScore = Math.round((cRisk.coercion_score || 0) * 100);
-    coercionScoreBadge.textContent = `${cScore}% COERCION`;
-    coercionScoreBadge.className = cScore >= 40 ? 'badge-red' : 'badge-green';
-
-    const snippets = cRisk.detected_coercion_snippets || [];
-    if (snippets.length > 0) {
-      detectedPhrasesList.innerHTML = snippets.map(s => `<span class="phrase-tag">"${s}"</span>`).join('');
+    coercionScoreBadge.textContent = cScore >= 40 ? 'HIGH' : 'LOW';
+    coercionScoreBadge.className = 'severity-pill-high';
+    if (cScore < 40) {
+      coercionScoreBadge.style.color = 'var(--green)';
+      coercionScoreBadge.style.background = 'var(--green-subtle)';
     } else {
-      detectedPhrasesList.innerHTML = '<span style="font-size: 10px; color: #64748b;">No coercive phrases detected (natural speech)</span>';
+      coercionScoreBadge.style.color = 'var(--red)';
+      coercionScoreBadge.style.background = 'rgba(255, 48, 79, 0.12)';
     }
+
+    if (detectedPhrasesList) {
+      const snippets = cRisk.detected_coercion_snippets || [];
+      if (snippets.length > 0) {
+        detectedPhrasesList.innerHTML = snippets.map(s => `<span class="threat-chip">"${s}"</span>`).join('');
+      } else {
+        detectedPhrasesList.innerHTML = '<span class="threat-chip" style="color:var(--muted); border-color:var(--border);">Normal conversation</span>';
+      }
+    }
+  }
+
+  // Deepfake hero score
+  if (cRisk.deepfake_confidence !== undefined) {
+    const scoreVal = cRisk.deepfake_confidence || 0;
+    if (dfScoreNumber) dfScoreNumber.textContent = scoreVal.toFixed(2);
+    if (dfProgressBar) dfProgressBar.style.width = `${Math.round(scoreVal * 100)}%`;
   }
 
   if (currentScenarioId === 1) {
-    // Scenario 1: Digital Arrest Extortion
-    if (tvTakeoverTitle) tvTakeoverTitle.textContent = '🚨 DIGITAL ARREST SCAM DETECTED: HANG UP IMMEDIATELY';
-    if (tvTakeoverSubtitle) tvTakeoverSubtitle.textContent = 'Indian Law Enforcement never conducts arrests or trials over video calls.';
+    // SCENARIO 1: Digital Arrest Extortion
+    if (claimCountEl) claimCountEl.textContent = '3 OFFICERS';
+    if (claimSubEl) claimSubEl.textContent = 'outside your door';
+    if (rHumanCount) rHumanCount.textContent = '0';
+    if (rPkgCount) rPkgCount.textContent = '0';
+    if (rDingCount) rDingCount.textContent = '0';
+
+    if (transcriptQuoteEl) {
+      transcriptQuoteEl.textContent = '“Armed police are outside your door. Transfer ₹4,50,000 now.”';
+    }
+
+    if (tvTakeoverTitle) tvTakeoverTitle.textContent = 'Takeover Active';
+    if (tvTakeoverSubtitle) tvTakeoverSubtitle.textContent = 'Living room TV intercepted · Emergency 1930 alert displayed. Fire TV Simulator (Vega OS)';
+    if (tvStatusChip) {
+      tvStatusChip.textContent = '● ACTIVE';
+      tvStatusChip.className = 'module-status-chip alert';
+    }
+    if (chimeChip) {
+      chimeChip.textContent = '● SOUNDING';
+      chimeChip.className = 'module-status-chip alert';
+    }
+    if (rChimeStatus) {
+      rChimeStatus.textContent = 'ALERT SOUNDING [SIMULATED CHIME]';
+      rChimeStatus.className = 'module-action-title alert';
+    }
+
     if (ringOracleBadge) {
       ringOracleBadge.textContent = '✔ RING PHYSICAL ORACLE: 0 PEOPLE AT DOOR (ENTRANCE EMPTY)';
-      ringOracleBadge.className = 'ring-oracle-badge-overlay';
     }
     if (bankFrozenBadge) {
-      bankFrozenBadge.textContent = '🔒 BANK TRANSFERS FROZEN BY POLICY';
-      bankFrozenBadge.className = 'bank-frozen-pill';
+      bankFrozenBadge.textContent = '● ACTIVE';
+      bankFrozenBadge.className = 'module-status-chip active';
     }
 
     callVideo.src = '/static/images/scam_officer_call.jpg';
-    callerName.textContent = cRisk.caller_claimed_identity;
+    callerName.textContent = cRisk.caller_claimed_identity || 'ACP Vikram Rathore';
     callerOrg.textContent = 'Crime Branch / Mumbai Narcotics';
-    dfTag.style.display = 'flex';
+    dfTag.style.display = 'block';
     dfPct.textContent = 'Deepfake analysis simulated';
-    transcriptEl.textContent = cRisk.transcript;
-    callStatusBadge.textContent = 'INCOMING EXTORTION CALL';
-    callStatusBadge.className = 'pane-status live';
-    paymentStatusEl.textContent = 'Payment Guard: Transfers LOCKED by MIRAGE-SHIELD [Simulated Gateway]';
-    paymentStatusEl.style.color = '#ff6b7e';
+    transcriptEl.textContent = cRisk.transcript || 'Officers have been dispatched and are standing outside your front door right now. Transfer ₹4,50,000 to the RBI verification escrow account immediately!';
+    callStatusBadge.textContent = '● LIVE';
+    callStatusBadge.className = 'badge-pill-threat';
+    paymentStatusEl.textContent = 'Outgoing UPI/bank transfers blocked immediately. [Simulated Gateway]';
 
     if (ringFeed) ringFeed.src = '/static/images/scenario1_empty_porch.jpg';
     doorStatusPill.textContent = 'DOOR: CLEAR (0 PEOPLE, 0 PARCELS)';
-    doorStatusPill.style.background = 'rgba(0, 230, 118, 0.9)';
     doorHashPill.textContent = 'SHA256: 9f83c18b...';
-    rHumanCount.textContent = '0';
-    rPkgCount.textContent = '0';
-    if (rDingCount) rDingCount.textContent = '0';
-    rChimeStatus.textContent = 'ALERT SOUNDING [SIMULATED CHIME]';
-    rChimeStatus.className = 'subbar-val alert';
-    oracleCallout.style.display = 'block';
-    const calloutBadge = oracleCallout.querySelector('.callout-badge');
-    if (calloutBadge) {
-      calloutBadge.textContent = '🚨 PHYSICAL CONTRADICTION DETECTED';
-      calloutBadge.style.color = 'var(--red-alert)';
+
+    if (oracleCallout) {
+      oracleCallout.style.display = 'flex';
+      oracleCallout.className = 'contradiction-glow-box';
     }
     const cleanDesc = (vVerdict.contradiction_summary || '').replace(/^(🚨\s*)?(PHYSICAL\s*)?CONTRADICTION\s*(DETECTED|CAUGHT|PROVED)?:?\s*/i, '');
-    oracleDesc.textContent = cleanDesc || "Caller claims Mumbai Crime Branch officers are outside your front door, but Ring Doorbell verifies 0 people and 0 vehicles at the entrance in the last 6 hours.";
+    if (oracleDesc) oracleDesc.textContent = cleanDesc || "0 people & 0 vehicles at entrance in past 6 hours.";
 
-    familyBadge.textContent = 'EMERGENCY ALERT';
-    familyBadge.className = 'pane-status alert';
-    familySms.innerHTML = `🚨 <strong>SUSPECTED DIGITAL ARREST SCAM:</strong> Mom is on an active video call with a fake police officer demanding ₹4,50,000. Ring front door camera verifies NO ONE is outside. <strong>Outgoing bank payments have been LOCKED automatically.</strong>`;
+    familyBadge.textContent = '● SENT';
+    familyBadge.className = 'module-status-chip sent';
+    familySms.innerHTML = `Alert sent to 2 family members with incident details. SIMULATED SMS`;
     cosignResult.textContent = 'Current Status: Transfers Frozen by Policy';
-    cosignResult.style.color = '#ff6b7e';
 
     appendLog('action', `[${new Date().toLocaleTimeString()}] INTERVENTION ACTIVATED: Scam contradiction caught.`);
     appendLog('info', `[${new Date().toLocaleTimeString()}] Engine active: ${vVerdict.reasoning_engine || 'Local Rule Heuristic'}.`);
     appendLog('kms', `[${new Date().toLocaleTimeString()}] Signed with Local HMAC-SHA256 (Sandbox Key). In-memory ledger committed.`);
-    kmsSigDisplay.textContent = 'hmac_sha256_9f83c18b76d0d2ff881679058b8d4f40f0c05763bf84c35626eb06c4ff94e09d';
-    verifyStatus.textContent = 'Signature Verified Valid (Local HMAC-SHA256)';
-    verifyStatus.style.color = '#00e676';
-
-    appendRingLog('info', 'GET /v1/devices -> 200 OK (Playground Device)');
-    appendRingLog('warn', 'Oracle query: 0 humans, 0 dings in 6h window');
-    appendRingLog('alert', 'Contradiction flagged: Scammer claimed raid; Porch is CLEAR');
-    appendRingLog('alert', 'Chime alert dispatched: audio_ref_urgent_security_alert');
+    kmsSigDisplay.textContent = '3f9a6c7e9f83c18b76d0d2ff881679058b8d4f40f0c05763bf84c35626eb06c4ff94e09d';
+    verifyStatus.textContent = 'Signature Verified Valid (LOCAL_HMAC_SHA256_SANDBOX)';
+    verifyStatus.style.color = 'var(--green)';
 
   } else if (currentScenarioId === 2) {
-    // Scenario 2: Genuine Family Call
-    if (tvTakeoverTitle) tvTakeoverTitle.textContent = '🟢 NORMAL FAMILY CALL VERIFIED: NO THREAT';
-    if (tvTakeoverSubtitle) tvTakeoverSubtitle.textContent = 'Conversational speech patterns normal. Zero coercion or deepfake detected.';
+    // SCENARIO 2: Genuine Family Call
+    if (claimCountEl) claimCountEl.textContent = '0 THREATS';
+    if (claimSubEl) claimSubEl.textContent = 'family video call';
+    if (rHumanCount) rHumanCount.textContent = '0';
+    if (rPkgCount) rPkgCount.textContent = '0';
+    if (rDingCount) rDingCount.textContent = '0';
+
+    if (transcriptQuoteEl) {
+      transcriptQuoteEl.textContent = '“Hi Mom! Just calling to check if you got the sweets we sent from Chennai.”';
+    }
+
+    if (tvTakeoverTitle) tvTakeoverTitle.textContent = 'Takeover Standby';
+    if (tvTakeoverSubtitle) tvTakeoverSubtitle.textContent = 'TV ambient display active. Zero false alarms triggered. Fire TV Simulator (Vega OS)';
+    if (tvStatusChip) {
+      tvStatusChip.textContent = '● READY';
+      tvStatusChip.className = 'module-status-chip ready';
+    }
+    if (chimeChip) {
+      chimeChip.textContent = '● READY';
+      chimeChip.className = 'module-status-chip ready';
+    }
+    if (rChimeStatus) {
+      rChimeStatus.textContent = 'QUIET [SIMULATED CHIME]';
+      rChimeStatus.className = 'module-action-title';
+      rChimeStatus.style.color = 'var(--green)';
+    }
+
     if (ringOracleBadge) {
       ringOracleBadge.textContent = '✔ RING PHYSICAL ORACLE: PORCH SECURE & QUIET';
-      ringOracleBadge.className = 'ring-oracle-badge-overlay safe';
     }
     if (bankFrozenBadge) {
-      bankFrozenBadge.textContent = '✔ TRANSFERS ARMED & NORMAL';
-      bankFrozenBadge.className = 'bank-frozen-pill secured';
+      bankFrozenBadge.textContent = '● ARMED';
+      bankFrozenBadge.className = 'module-status-chip ready';
     }
 
     callVideo.src = '/static/images/genuine_daughter_call.jpg';
     callerName.textContent = 'Pooja (Daughter)';
     callerOrg.textContent = 'Family Contact';
     dfTag.style.display = 'none';
-    transcriptEl.textContent = cRisk.transcript;
-    callStatusBadge.textContent = 'ACTIVE FAMILY CALL';
-    callStatusBadge.className = 'pane-status armed';
-    paymentStatusEl.textContent = 'Payment Guard: Normal / Armed [Simulated Gateway]';
-    paymentStatusEl.style.color = '#94a3b8';
+    transcriptEl.textContent = cRisk.transcript || 'Hi Mom! Just calling to check if you got the sweets we sent from Chennai.';
+    callStatusBadge.textContent = '● SAFE';
+    callStatusBadge.className = 'badge-pill-live';
+    paymentStatusEl.textContent = 'Payment Guard: Armed & Normal [Simulated Gateway]';
 
     if (ringFeed) ringFeed.src = '/static/images/scenario1_empty_porch.jpg';
     doorStatusPill.textContent = 'DOOR: CLEAR';
-    doorStatusPill.style.background = 'rgba(0, 210, 255, 0.8)';
-    rHumanCount.textContent = '0';
-    rPkgCount.textContent = '0';
-    if (rDingCount) rDingCount.textContent = '0';
-    rChimeStatus.textContent = 'QUIET [SIMULATED CHIME]';
-    rChimeStatus.className = 'subbar-val clear';
-    oracleCallout.style.display = 'none';
+    doorHashPill.textContent = 'SHA256: 9f83c18b...';
 
-    familyBadge.textContent = 'NORMAL';
-    familyBadge.className = 'pane-status armed';
-    familySms.innerHTML = `Family Sentinel: No suspicious calls or coercion detected. Everything quiet.`;
+    if (oracleCallout) {
+      oracleCallout.style.display = 'flex';
+      oracleCallout.className = 'contradiction-glow-box safe';
+    }
+    if (oracleDesc) oracleDesc.textContent = 'Normal family conversation verified. Zero physical contradiction.';
+
+    familyBadge.textContent = '● IDLE';
+    familyBadge.className = 'module-status-chip ready';
+    familySms.innerHTML = `No alert required. Family contact verified. SIMULATED SMS`;
     cosignResult.textContent = 'No active locks.';
-    cosignResult.style.color = '#94a3b8';
 
-    appendLog('info', `[${new Date().toLocaleTimeString()}] Genuine call verified: Zero coercion or deepfake. Verdict=SAFE.`);
-    appendRingLog('info', 'GET /v1/devices -> 200 OK (Playground Device)');
-    appendRingLog('success', 'Event history: 0 humans, 0 dings (Quiet baseline)');
-    appendRingLog('success', 'Oracle verification: Normal family call verified');
+    kmsSigDisplay.textContent = '8a72b0c16f21c99b881679058b8d4f40f0c05763bf84c35626eb06c4ff94e09d12345678';
+    verifyStatus.textContent = 'Normal Session Committed (LOCAL_HMAC_SHA256_SANDBOX)';
 
   } else if (currentScenarioId === 3) {
-    // Scenario 3: Real Amazon Courier Delivery
-    if (tvTakeoverTitle) tvTakeoverTitle.textContent = '📦 AMAZON COURIER DELIVERY VERIFIED';
-    if (tvTakeoverSubtitle) tvTakeoverSubtitle.textContent = 'Real package delivery confirmed at entrance. Zero false alarms triggered.';
-    if (ringOracleBadge) {
-      ringOracleBadge.textContent = '✔ RING PHYSICAL ORACLE: 1 PARCEL DELIVERED';
-      ringOracleBadge.className = 'ring-oracle-badge-overlay safe';
-    }
-    if (bankFrozenBadge) {
-      bankFrozenBadge.textContent = '✔ TRANSFERS ARMED & NORMAL';
-      bankFrozenBadge.className = 'bank-frozen-pill secured';
+    // SCENARIO 3: Real Amazon Courier Delivery (FIXED: Courier photo instead of daughter)
+    if (claimCountEl) claimCountEl.textContent = '1 COURIER';
+    if (claimSubEl) claimSubEl.textContent = 'package at door';
+    if (rHumanCount) rHumanCount.textContent = '1';
+    if (rPkgCount) rPkgCount.textContent = '1';
+    if (rDingCount) rDingCount.textContent = '1';
+
+    if (transcriptQuoteEl) {
+      transcriptQuoteEl.textContent = '“Hello sir, I have placed your Amazon package safely by the front door.”';
     }
 
-    callVideo.src = '/static/images/genuine_daughter_call.jpg';
+    if (tvTakeoverTitle) tvTakeoverTitle.textContent = 'Delivery Verified';
+    if (tvTakeoverSubtitle) tvTakeoverSubtitle.textContent = 'Real parcel confirmed at entrance. Zero false alarms. Fire TV Simulator (Vega OS)';
+    if (tvStatusChip) {
+      tvStatusChip.textContent = '● READY';
+      tvStatusChip.className = 'module-status-chip ready';
+    }
+    if (chimeChip) {
+      chimeChip.textContent = '● CHIME';
+      chimeChip.className = 'module-status-chip ready';
+    }
+    if (rChimeStatus) {
+      rChimeStatus.textContent = 'DOORBELL DING [SIMULATED CHIME]';
+      rChimeStatus.className = 'module-action-title';
+      rChimeStatus.style.color = 'var(--blue)';
+    }
+
+    if (ringOracleBadge) {
+      ringOracleBadge.textContent = '✔ RING PHYSICAL ORACLE: 1 PARCEL DELIVERED';
+    }
+    if (bankFrozenBadge) {
+      bankFrozenBadge.textContent = '● ARMED';
+      bankFrozenBadge.className = 'module-status-chip ready';
+    }
+
+    // FIX SCENARIO 3 BUG: show delivery image instead of daughter
+    callVideo.src = '/static/images/scenario3_amazon_delivery.jpg';
     callerName.textContent = 'Amazon Delivery (Ramesh)';
     callerOrg.textContent = 'Logistics Courier';
     dfTag.style.display = 'none';
-    transcriptEl.textContent = cRisk.transcript;
-    callStatusBadge.textContent = 'DELIVERY CALL';
-    callStatusBadge.className = 'pane-status armed';
+    transcriptEl.textContent = cRisk.transcript || 'Hello sir, I have placed your Amazon package safely by the front door.';
+    callStatusBadge.textContent = '● DELIVERY';
+    callStatusBadge.className = 'badge-pill-live';
     paymentStatusEl.textContent = 'Payment Guard: Armed [Simulated Gateway]';
-    paymentStatusEl.style.color = '#94a3b8';
 
     if (ringFeed) ringFeed.src = '/static/images/scenario3_amazon_delivery.jpg';
     doorStatusPill.textContent = 'DOOR: PACKAGE DELIVERED (1 PARCEL)';
-    doorStatusPill.style.background = 'rgba(0, 230, 118, 0.9)';
     doorHashPill.textContent = 'SHA256: 7a819bcf...';
-    rHumanCount.textContent = '1';
-    rPkgCount.textContent = '1';
-    if (rDingCount) rDingCount.textContent = '1';
-    rChimeStatus.textContent = 'DOORBELL DING [SIMULATED CHIME]';
-    rChimeStatus.className = 'subbar-val clear';
-    oracleCallout.style.display = 'block';
-    oracleCallout.querySelector('.callout-badge').textContent = 'DELIVERY CONFIRMED';
-    oracleCallout.querySelector('.callout-badge').style.color = '#00e676';
-    oracleDesc.textContent = 'Ring Camera Confirms Amazon Parcel on porch. No false alarm raised.';
 
-    familyBadge.textContent = 'DELIVERY';
-    familyBadge.className = 'pane-status armed';
-    familySms.innerHTML = `Amazon Package arrived at front porch. Courier verified by Ring doorbell.`;
-    cosignResult.textContent = 'No locks.';
-    cosignResult.style.color = '#94a3b8';
+    if (oracleCallout) {
+      oracleCallout.style.display = 'flex';
+      oracleCallout.className = 'contradiction-glow-box safe';
+    }
+    if (oracleDesc) oracleDesc.textContent = 'Ring Camera Confirms Amazon Parcel on porch. No false alarm raised.';
 
-    appendLog('oracle', `[${new Date().toLocaleTimeString()}] Ring package delivery verified. Genuine courier passed with zero false alarms.`);
-    appendRingLog('info', 'GET /v1/devices -> 200 OK (Playground Device)');
-    appendRingLog('info', 'Event history: 1 package delivered, 1 ding in past 6h');
-    appendRingLog('success', 'Oracle verification: Amazon courier drop verified (Safe)');
+    familyBadge.textContent = '● DELIVERY';
+    familyBadge.className = 'module-status-chip ready';
+    familySms.innerHTML = `Amazon Package arrived at front porch. Courier verified. SIMULATED SMS`;
+    cosignResult.textContent = 'No locks active.';
+
+    kmsSigDisplay.textContent = '7a819bcf881679058b8d4f40f0c05763bf84c35626eb06c4ff94e09dd2b4e1f0a1b2c3d4';
+    verifyStatus.textContent = 'Delivery Audit Logged (LOCAL_HMAC_SHA256_SANDBOX)';
   }
 }
 
-// Interactive Payment Attempt
+// Dynamic Recent Incidents Loader from /api/audit/incidents
+async function loadRecentIncidents() {
+  const container = document.getElementById('incidents-table-body');
+  const auditSystemMode = document.getElementById('audit-system-mode');
+  
+  try {
+    const res = await fetch('/api/audit/incidents');
+    if (!res.ok) return;
+    const data = await res.json();
+    
+    // Update Audit & Integrity system badge
+    if (auditSystemMode) {
+      if (data.kms_active && data.signature_mode === 'AWS_KMS_ASYMMETRIC_RSA') {
+        auditSystemMode.textContent = 'AWS KMS SIGNED';
+      } else {
+        auditSystemMode.textContent = 'LOCAL_HMAC_SHA256_SANDBOX';
+      }
+    }
+
+    if (!container) return;
+
+    const incidents = data.incidents || [];
+    if (incidents.length === 0) {
+      container.innerHTML = `
+        <div class="incident-row">
+          <div class="inc-ico-circle red">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div class="inc-main">
+            <span class="inc-title">Digital arrest attempt</span>
+            <span class="inc-sub">Scam call with fake police claim</span>
+          </div>
+          <span class="inc-time">14:32<br>23 Oct 2026</span>
+          <span class="inc-badge-pill danger">HIGH RISK</span>
+          <span class="inc-meta-ring">Ring: 0 humans</span>
+          <span class="inc-meta-extra">Deepfake: 0.92</span>
+          <span class="inc-arrow">›</span>
+        </div>
+        <div class="incident-row">
+          <div class="inc-ico-circle green">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          </div>
+          <div class="inc-main">
+            <span class="inc-title">Family video call</span>
+            <span class="inc-sub">Sister video call (Chennai)</span>
+          </div>
+          <span class="inc-time">13:08<br>23 Oct 2026</span>
+          <span class="inc-badge-pill safe">VERIFIED SAFE</span>
+          <span class="inc-meta-ring">Ring: 1 human</span>
+          <span class="inc-meta-extra">Normal call</span>
+          <span class="inc-arrow">›</span>
+        </div>
+        <div class="incident-row">
+          <div class="inc-ico-circle blue">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          <div class="inc-main">
+            <span class="inc-title">Courier arrival</span>
+            <span class="inc-sub">Amazon delivery (package detected)</span>
+          </div>
+          <span class="inc-time">12:41<br>23 Oct 2026</span>
+          <span class="inc-badge-pill delivery">VERIFIED DELIVERY</span>
+          <span class="inc-meta-ring">Ring: 1 human</span>
+          <span class="inc-meta-extra">Package detected</span>
+          <span class="inc-arrow">›</span>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = incidents.slice(0, 4).map(inc => {
+      const isIntervene = inc.action === 'INTERVENE';
+      const pillClass = isIntervene ? 'danger' : 'safe';
+      const circleClass = isIntervene ? 'red' : 'green';
+      const badgeText = isIntervene ? 'HIGH RISK' : 'VERIFIED SAFE';
+      const timeStr = inc.timestamp ? inc.timestamp.substring(11, 16) : '14:32';
+      return `
+        <div class="incident-row">
+          <div class="inc-ico-circle ${circleClass}">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <div class="inc-main">
+            <span class="inc-title">${inc.incident_id || 'Incident Recorded'}</span>
+            <span class="inc-sub">${isIntervene ? 'Scam call blocked by Ring Oracle' : 'Verified safe interaction'}</span>
+          </div>
+          <span class="inc-time">${timeStr}<br>23 Oct 2026</span>
+          <span class="inc-badge-pill ${pillClass}">${badgeText}</span>
+          <span class="inc-meta-ring">Ring: Verified</span>
+          <span class="inc-meta-extra">HMAC-SHA256</span>
+          <span class="inc-arrow">›</span>
+        </div>
+      `;
+    }).join('');
+
+  } catch (err) {
+    console.warn("Could not load recent incidents:", err);
+  }
+}
+
+// Copy Hash to Clipboard
+function copyAuditHash() {
+  const hashEl = document.getElementById('kms-sig-display');
+  const btn = document.getElementById('btn-copy-hash');
+  if (hashEl) {
+    const text = hashEl.textContent.trim();
+    navigator.clipboard.writeText(text).then(() => {
+      if (btn) {
+        btn.innerHTML = '<span style="color:var(--green); font-size:10px;">✔</span>';
+        setTimeout(() => {
+          btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+        }, 1500);
+      }
+    });
+  }
+}
+
+// Modal Takeover Handlers
+function openTakeoverModal() {
+  const modal = document.getElementById('takeover-modal');
+  if (modal) modal.classList.add('open');
+}
+
+function closeTakeoverModal() {
+  const modal = document.getElementById('takeover-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+// Toggle Victim Phone Drawer
+function toggleVictimPhoneDrawer(forceState) {
+  const drawer = document.getElementById('victim-phone-drawer');
+  if (!drawer) return;
+  if (typeof forceState === 'boolean') {
+    drawer.classList.toggle('open', forceState);
+  } else {
+    drawer.classList.toggle('open');
+  }
+}
+
+// Payment Attempt
 async function attemptPayment() {
-  paymentStatusEl.textContent = 'Processing transaction request [Simulated Gateway]...';
+  if (paymentStatusEl) paymentStatusEl.textContent = 'Processing transaction request [Simulated Gateway]...';
   try {
     const res = await fetch('/api/payment/attempt', {
       method: 'POST',
@@ -300,12 +540,16 @@ async function attemptPayment() {
     });
     const result = await res.json();
     if (result.blocked) {
-      paymentStatusEl.innerHTML = `🛑 <strong>BLOCKED:</strong> ₹4,50,000 transfer halted by MIRAGE-SHIELD! [Simulated Gateway]`;
-      paymentStatusEl.style.color = '#ff2b43';
+      if (paymentStatusEl) {
+        paymentStatusEl.innerHTML = `🛑 <strong>BLOCKED:</strong> ₹4,50,000 transfer halted by MIRAGE-SHIELD! [Simulated Gateway]`;
+        paymentStatusEl.style.color = 'var(--red)';
+      }
       appendLog('action', `[${new Date().toLocaleTimeString()}] Transfer of ₹4,50,000 to fake RBI escrow BLOCKED [Simulated Gateway].`);
     } else {
-      paymentStatusEl.innerHTML = `✔ Transfer processed: ₹4,50,000 [Simulated Gateway]`;
-      paymentStatusEl.style.color = '#00e676';
+      if (paymentStatusEl) {
+        paymentStatusEl.innerHTML = `✔ Transfer processed: ₹4,50,000 [Simulated Gateway]`;
+        paymentStatusEl.style.color = 'var(--green)';
+      }
     }
   } catch (err) {
     console.error("Payment attempt error:", err);
@@ -314,7 +558,7 @@ async function attemptPayment() {
 
 // Family Co-sign actions
 async function approveCosign() {
-  cosignResult.textContent = 'Authorizing release with family signature...';
+  if (cosignResult) cosignResult.textContent = 'Authorizing release with family signature...';
   try {
     const res = await fetch('/api/payment/cosign', {
       method: 'POST',
@@ -322,28 +566,29 @@ async function approveCosign() {
       body: JSON.stringify({ authorized_by: 'Rohan (Son) - Verified PIN' })
     });
     const result = await res.json();
-    cosignResult.innerHTML = `✔ <strong>PAYMENT RELEASED:</strong> Authorized by ${result.authorized_by}`;
-    cosignResult.style.color = '#00e676';
-    paymentStatusEl.textContent = 'Payment Guard: Released by Family Co-Sign [Simulated Gateway]';
-    paymentStatusEl.style.color = '#00e676';
+    if (cosignResult) {
+      cosignResult.innerHTML = `✔ <strong>PAYMENT RELEASED:</strong> Authorized by ${result.authorized_by}`;
+      cosignResult.style.color = 'var(--green)';
+    }
+    if (paymentStatusEl) {
+      paymentStatusEl.textContent = 'Payment Guard: Released by Family Co-Sign [Simulated Gateway]';
+      paymentStatusEl.style.color = 'var(--green)';
+    }
     appendLog('kms', `[${new Date().toLocaleTimeString()}] Family co-sign approved by Rohan. Payment unblocked.`);
   } catch (err) {
     console.error("Cosign error:", err);
   }
 }
 
-function rejectPayment() {
-  cosignResult.innerHTML = `✖ <strong>TRANSFER BLOCKED INDEFINITELY.</strong> Incident forwarded to Cyber Helpline 1930. [Simulated Response]`;
-  cosignResult.style.color = '#ff2b43';
-  appendLog('action', `[${new Date().toLocaleTimeString()}] Family confirmed scam. Permanent block committed to in-memory ledger.`);
-}
-
-function verifyKmsSignature() {
-  verifyStatus.textContent = 'Validating cryptographic HMAC-SHA256 signature against payload digest...';
-  setTimeout(() => {
-    verifyStatus.innerHTML = `✔ <strong>Cryptographic Signature VALID (Local HMAC-SHA256 Sandbox Digest)</strong>`;
-    verifyStatus.style.color = '#00e676';
-  }, 400);
+async function rejectPayment() {
+  if (cosignResult) {
+    cosignResult.innerHTML = `🛑 <strong>TRANSFER PERMANENTLY BLOCKED:</strong> Reported to 1930 Cyber Cell.`;
+    cosignResult.style.color = 'var(--red)';
+  }
+  if (paymentStatusEl) {
+    paymentStatusEl.textContent = 'Payment Guard: Transfer cancelled permanently. 1930 report filed. [Simulated Gateway]';
+    paymentStatusEl.style.color = 'var(--red)';
+  }
 }
 
 function appendLog(type, text) {
@@ -355,7 +600,7 @@ function appendLog(type, text) {
   agentLogs.scrollTop = agentLogs.scrollHeight;
 }
 
-// Dynamic Ring Health and Playground Detection
+// Ring Health API check
 async function updateRingHealthStatus() {
   try {
     const res = await fetch('/api/ring/health');
@@ -363,59 +608,17 @@ async function updateRingHealthStatus() {
     const data = await res.json();
     const telRing = document.getElementById('tel-ring');
     const telRingDot = document.getElementById('tel-ring-dot');
-    const ringBadge = document.getElementById('ring-oracle-status-badge');
-
+    
     if (telRing) {
       if (data.status === 'CONNECTED') {
-        telRing.textContent = data.is_playground ? 'Doorbell Pro • 🟢 Connected (Playground API)' : 'Doorbell Pro • 🟢 Connected (Live API)';
-        if (telRingDot) telRingDot.className = 'dot green';
-        if (ringBadge) {
-          ringBadge.textContent = data.is_playground ? 'PLAYGROUND DEVICE (LIVE API)' : 'LIVE RING DEVICE';
-          ringBadge.className = 'pane-status armed';
-        }
-        if (ringDeviceName && data.device_name) {
-          ringDeviceName.textContent = data.device_name;
-        }
-        if (ringDeviceIdChip) {
-          ringDeviceIdChip.textContent = 'ava1.ring.device...';
-          if (data.device_id) {
-            ringDeviceIdChip.title = data.device_id;
-          }
-        }
-
-        // Fetch official device details for thumbnail
-        try {
-          const devRes = await fetch('/api/ring/devices');
-          if (devRes.ok) {
-            const devData = await devRes.json();
-            const firstDev = (devData.devices && devData.devices[0]) || {};
-            const imgUrl = (firstDev.raw_attributes && firstDev.raw_attributes.image_url) || null;
-            if (imgUrl && ringDeviceThumb) {
-              ringDeviceThumb.src = imgUrl;
-            }
-          }
-        } catch (_) {}
-
-      } else if (data.status === 'TOKEN_EXPIRED') {
-        telRing.textContent = 'Doorbell Pro • 🔴 Token Expired (401)';
-        if (telRingDot) telRingDot.className = 'dot red';
-        if (ringBadge) {
-          ringBadge.textContent = 'TOKEN EXPIRED (401)';
-          ringBadge.className = 'pane-status alert';
-        }
-      } else if (data.status === 'FORBIDDEN') {
-        telRing.textContent = 'Doorbell Pro • 🔴 Forbidden (403)';
-        if (telRingDot) telRingDot.className = 'dot red';
-        if (ringBadge) {
-          ringBadge.textContent = 'ACCESS FORBIDDEN (403)';
-          ringBadge.className = 'pane-status alert';
+        telRing.textContent = 'SYSTEM OPERATIONAL';
+        if (telRingDot) {
+          telRingDot.className = 'status-dot-pulse';
         }
       } else {
-        telRing.textContent = 'Doorbell Pro • 🟡 Connected (Sandbox Fixtures)';
-        if (telRingDot) telRingDot.className = 'dot yellow';
-        if (ringBadge) {
-          ringBadge.textContent = 'SANDBOX FIXTURES';
-          ringBadge.className = 'pane-status armed';
+        telRing.textContent = 'SYSTEM ACTIVE (SANDBOX)';
+        if (telRingDot) {
+          telRingDot.className = 'status-dot-pulse';
         }
       }
     }
@@ -424,40 +627,55 @@ async function updateRingHealthStatus() {
   }
 }
 
-// Action Bar Remote / Screen Handlers for Living Room Incident Theater
+// In-Page Toast Controller
+let toastTimeout = null;
+function showToast(title, message, type = 'safe') {
+  const toast = document.getElementById('console-toast');
+  const titleEl = document.getElementById('toast-title');
+  const msgEl = document.getElementById('toast-message');
+  if (!toast) return;
+
+  if (titleEl) titleEl.textContent = title;
+  if (msgEl) msgEl.textContent = message;
+
+  toast.className = `console-toast ${type}`;
+  toast.classList.remove('hidden');
+
+  if (toastTimeout) clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => {
+    hideToast();
+  }, 4000);
+}
+
+function hideToast() {
+  const toast = document.getElementById('console-toast');
+  if (toast) toast.classList.add('hidden');
+}
+
 function dial1930() {
-  appendLog('action', `[${new Date().toLocaleTimeString()}] EMERGENCY ACTION: Connecting to Indian National Cyber Crime Helpline (1930).`);
-  alert('🚨 EMERGENCY PROTOCOL TRIGGERED:\n\nConnecting victim to Indian National Cyber Crime Helpline 1930.\n\n• Bank transfers remain locked by policy.\n• Cryptographic evidence bundle & Ring doorbell snapshots submitted to Indian Cyber Crime Reporting Portal (cybercrime.gov.in).');
+  appendLog('action', `[${new Date().toLocaleTimeString()}] EMERGENCY ACTION: Connecting to 1930 helpline.`);
+  showToast('Calling 1930 (simulated)', 'Connecting victim to National Cyber Crime Helpline. Outgoing bank transfers remain locked by policy.', 'alert');
 }
 
 function endCallAndProtect() {
   if (callStatusBadge) {
-    callStatusBadge.textContent = 'CALL TERMINATED BY USER';
-    callStatusBadge.className = 'pane-status safe';
+    callStatusBadge.textContent = '● TERMINATED';
+    callStatusBadge.className = 'badge-pill-live';
   }
   if (bankFrozenBadge) {
-    bankFrozenBadge.textContent = '🛡️ ACCOUNT SECURED & TRANSFERS SAFE';
-    bankFrozenBadge.className = 'bank-frozen-pill secured';
+    bankFrozenBadge.textContent = '● SECURED';
+    bankFrozenBadge.className = 'module-status-chip ready';
   }
   if (paymentStatusEl) {
     paymentStatusEl.textContent = 'Payment Guard: Call Severed. Bank Transfers Fully Secured.';
-    paymentStatusEl.style.color = '#00e676';
+    paymentStatusEl.style.color = 'var(--green)';
   }
-  appendLog('action', `[${new Date().toLocaleTimeString()}] Remote command: [SELECT] End Call & Protect Account executed.`);
-  appendLog('info', `[${new Date().toLocaleTimeString()}] Extortion video call severed. Threat neutralized.`);
-  alert('✔ CALL TERMINATED & ACCOUNT PROTECTED!\n\n• Video stream severed.\n• Outgoing banking transfers secured.\n• Incident logged in HMAC-SHA256 audit ledger.');
+  closeTakeoverModal();
+  showToast('Threat Neutralized', 'Call terminated and bank transfers secured. Incident committed to HMAC-SHA256 audit ledger.', 'safe');
 }
 
 function viewDoorbellLive() {
-  appendRingLog('info', 'Switching to Ring Video Doorbell Pro Live View (1080p WHEP SDP negotiation)...');
-  appendLog('oracle', `[${new Date().toLocaleTimeString()}] Ring 1080p WHEP live stream requested. Zero movement outside.`);
-  alert('🔔 RING VIDEO DOORBELL PRO - LIVE VIEW:\n\n• WHEP SDP media session established (1080p receive-only).\n• Front entrance status: CLEAR (0 humans detected, entrance empty).');
-}
-
-function sendTvKey(key) {
-  if (tvIframe && tvIframe.contentWindow) {
-    tvIframe.contentWindow.dispatchEvent(new KeyboardEvent('keydown', { key: key }));
-  }
+  showToast('Live stream view (simulated)', 'Front entrance status: CLEAR (0 humans detected, entrance empty).', 'safe');
 }
 
 function resetAll() {
@@ -468,5 +686,6 @@ function resetAll() {
 document.addEventListener('DOMContentLoaded', () => {
   runScenario(1);
   updateRingHealthStatus();
+  loadRecentIncidents();
 });
 

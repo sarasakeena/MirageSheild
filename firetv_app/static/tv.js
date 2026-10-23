@@ -72,6 +72,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // In-Page TV Toast
+  let tvToastTimeout = null;
+  function showTvToast(title, message) {
+    const toast = document.getElementById('tv-toast');
+    const titleEl = document.getElementById('tv-toast-title');
+    const msgEl = document.getElementById('tv-toast-message');
+    if (!toast) return;
+
+    if (titleEl) titleEl.textContent = title;
+    if (msgEl) msgEl.textContent = message;
+
+    toast.classList.remove('hidden');
+    if (tvToastTimeout) clearTimeout(tvToastTimeout);
+    tvToastTimeout = setTimeout(() => {
+      toast.classList.add('hidden');
+    }, 4000);
+  }
+
   // Button actions
   buttons[0].addEventListener('click', () => {
     // Hangup / Dismiss
@@ -80,13 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   buttons[1].addEventListener('click', () => {
-    // Open full doorbell feed modal or view
-    alert("Displaying Fullscreen 1080p WHEP Live Stream from Front Porch Ring Doorbell...");
+    // Live stream view (simulated)
+    showTvToast("Live stream view (simulated)", "Front porch Ring camera verifies 0 humans, entrance clear.");
   });
 
   buttons[2].addEventListener('click', () => {
-    // 1930 Helpline action
-    alert("Connecting living room speaker to National Cybercrime Helpline: 1930");
+    // Calling 1930 (simulated)
+    showTvToast("Calling 1930 (simulated)", "Connecting living room speaker to National Cyber Crime Helpline.");
   });
 
   // State sync from backend API

@@ -6,369 +6,632 @@
   <title>MIRAGE-SHIELD | Living Room Scam Defense Console</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/console/style.css">
 </head>
 <body class="console-body">
-  <!-- TOP NAV & STATUS -->
-  <header class="top-nav">
-    <div class="brand-group">
-      <div class="logo-shield">
-        <span class="shield-glyph">🛡️</span>
+  <div class="app-shell">
+    
+    <!-- ================= 1. TOP BAR ================= -->
+    <header class="top-bar">
+      <!-- Left: Logo & Wordmark -->
+      <div class="top-bar-left">
+        <div class="brand-emblem-box">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L3 6v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V6l-9-4z" stroke="#FF304F" stroke-width="1.75"/>
+            <path d="M7 12c1.5-3 3.5-4.5 5-4.5s3.5 1.5 5 4.5c-1.5 3-3.5 4.5-5 4.5S8.5 15 7 12z" stroke="#E8F0F8" stroke-width="1.5"/>
+            <circle cx="12" cy="12" r="2" fill="#FF304F"/>
+          </svg>
+        </div>
+        <div class="brand-wordmark-group">
+          <div class="brand-wordmark">MIRAGE-<span class="accent-red">SHIELD</span></div>
+          <div class="brand-subtitle-line">Living-Room Defense Against Digital Arrest Scams</div>
+        </div>
       </div>
-      <div>
-        <div class="brand-title">MIRAGE-SHIELD</div>
-        <div class="brand-subtitle">Living Room Scam Defense & Physical Evidence Oracle</div>
-      </div>
-    </div>
 
-    <!-- Header Right: Compact Ring Pill & Diagnostics Toggle -->
-    <div class="header-right-group">
-      <div class="consolidated-ring-pill" id="consolidated-ring-pill">
-        <span class="ring-status-label" id="tel-ring">Doorbell Pro • 🟢 Connected (Playground API)</span>
+      <!-- Center: Distinctive Tagline -->
+      <div class="top-bar-center">
+        <div class="tagline-line-1">Same Home. Different Stories.</div>
+        <div class="tagline-line-2">We Find The Truth.</div>
       </div>
-      <button class="tray-toggle-btn" id="tray-toggle-btn" onclick="toggleDiagnosticsTray()" title="Toggle System Telemetry">
-        <span class="gear-icon">⚙</span> Diagnostics <span class="chevron" id="tray-chevron">▾</span>
+
+      <!-- Right: System Status, IST Clock & Avatar -->
+      <div class="top-bar-right">
+        <div class="system-status-pill" id="consolidated-ring-pill">
+          <span class="status-dot-pulse" id="tel-ring-dot"></span>
+          <div class="status-pill-text">
+            <span class="status-title" id="tel-ring">SYSTEM OPERATIONAL</span>
+            <span class="status-subtext">Ring · AWS · AI Agent · PaymentGuard</span>
+          </div>
+        </div>
+
+        <div class="top-ist-clock">
+          <span class="ist-date" id="ist-date">Thu, 23 Oct 2026</span>
+          <span class="ist-time" id="ist-time">14:32 IST</span>
+        </div>
+
+        <div class="user-avatar-badge" title="Active Console Operator">T</div>
+      </div>
+    </header>
+
+    <!-- ================= SCENARIO SWITCHER RIBBON ================= -->
+    <nav class="scenario-ribbon">
+      <div class="scenario-ribbon-left">
+        <span class="scenario-ribbon-label">Demo Scenarios:</span>
+        <div class="scenario-buttons-compact">
+          <button class="scen-btn active" id="btn-scen-1" onclick="runScenario(1)">
+            <span class="scen-tag-pill">1</span>
+            <span>Digital arrest attempt</span>
+          </button>
+          <button class="scen-btn" id="btn-scen-2" onclick="runScenario(2)">
+            <span class="scen-tag-pill">2</span>
+            <span>Family video call</span>
+          </button>
+          <button class="scen-btn" id="btn-scen-3" onclick="runScenario(3)">
+            <span class="scen-tag-pill">3</span>
+            <span>Courier arrival</span>
+          </button>
+        </div>
+      </div>
+      <button class="reset-btn-compact" id="btn-reset-scenario" onclick="resetAll()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        <span>Reset demo</span>
       </button>
-    </div>
-  </header>
+    </nav>
 
-  <!-- SCENARIO SWITCHER CONTROLS -->
-  <section class="scenario-bar">
-    <div class="scenario-label">INCIDENT THEATER SCENARIOS:</div>
-    <div class="scenario-buttons">
-      <button class="scen-btn active" id="btn-scen-1" onclick="runScenario(1)">
-        <span class="scen-num">1</span>
-        <div class="scen-text">
-          <strong>Digital Arrest Extortion</strong>
-          <small>Fake CBI officer claims door raid · Ring catches lie · TV takeover</small>
+    <!-- ================= APP BODY ================= -->
+    <div class="app-body">
+          <!-- ================= 2. LEFT SIDEBAR (~200px) ================= -->
+      <aside class="sidebar">
+        <nav class="sidebar-nav-list">
+          <button class="sidebar-nav-item active" type="button" onclick="document.getElementById('ring-panel').scrollIntoView({behavior:'smooth'})">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Overview</span>
+          </button>
+          <button class="sidebar-nav-item" type="button" onclick="document.getElementById('ring-panel').scrollIntoView({behavior:'smooth'})">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span>Live Evidence</span>
+          </button>
+          <button class="sidebar-nav-item" type="button" onclick="document.getElementById('analysis-panel').scrollIntoView({behavior:'smooth'})">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 1v22"/><path d="M17 5v14"/><path d="M22 9v6"/><path d="M7 5v14"/><path d="M2 9v6"/></svg>
+            <span>Call Analysis</span>
+          </button>
+          <button class="sidebar-nav-item" type="button" onclick="document.getElementById('response-panel').scrollIntoView({behavior:'smooth'})">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>Response Center</span>
+          </button>
+          <button class="sidebar-nav-item" type="button" onclick="document.getElementById('incidents-panel').scrollIntoView({behavior:'smooth'})">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>Incidents</span>
+          </button>
+          <button class="sidebar-nav-item" type="button" onclick="document.getElementById('audit-panel').scrollIntoView({behavior:'smooth'})">
+            <svg class="nav-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            <span>Audit Ledger</span>
+          </button>
+        </nav>
+
+        <!-- Sidebar Signature Block -->
+        <div class="sidebar-footer-signature">
+          <div class="sidebar-signature-title">REAL HOMES.<br>SAFER FAMILIES.</div>
+          <div class="sidebar-signature-sub">AI + Physical Evidence against digital arrest scams.</div>
         </div>
-      </button>
-      <button class="scen-btn" id="btn-scen-2" onclick="runScenario(2)">
-        <span class="scen-num">2</span>
-        <div class="scen-text">
-          <strong>Genuine Family Call</strong>
-          <small>Daughter calls mother · 0 coercion · Stays quiet (Zero false alarm)</small>
-        </div>
-      </button>
-      <button class="scen-btn" id="btn-scen-3" onclick="runScenario(3)">
-        <span class="scen-num">3</span>
-        <div class="scen-text">
-          <strong>Amazon Courier Delivery</strong>
-          <small>Real parcel dropped at door · Ring verifies package · Zero false alarm</small>
-        </div>
-      </button>
-      <button class="reset-btn" onclick="resetAll()">↺ Reset Demo</button>
-    </div>
-  </section>
+      </aside>
 
-  <!-- 2-COLUMN INCIDENT THEATER -->
-  <main class="theater-grid">
-    <!-- LEFT COLUMN (35%): VICTIM'S SMARTPHONE -->
-    <section class="theater-col phone-col">
-      <div class="theater-col-header">
-        <span class="theater-col-title">📱 1. VICTIM'S SMARTPHONE</span>
-        <span class="pane-status live" id="call-status-badge">INCOMING EXTORTION CALL</span>
-      </div>
-
-      <div class="phone-frame">
-        <div class="phone-screen">
-          <!-- Video Call Feed -->
-          <div class="video-container">
-            <img id="call-video-feed" src="/static/images/scam_officer_call.jpg" alt="Video Call Feed">
-            <div class="caller-id-overlay">
-              <span class="caller-name" id="caller-name-display">ACP Vikram Rathore</span>
-              <span class="caller-org" id="caller-org-display">Crime Branch / Mumbai Narcotics</span>
-            </div>
-            <div class="deepfake-live-tag" id="deepfake-tag">
-              <span class="pulse-red"></span> DEEPFAKE: <strong id="df-percentage">Deepfake analysis simulated</strong>
-            </div>
-          </div>
-
-          <!-- Audio Waveform -->
-          <div class="audio-waveform-bar" id="waveform-bar">
-            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-          </div>
-
-          <!-- Transcript & Coercion Detection -->
-          <div class="transcript-box">
-            <div class="transcript-title">LIVE CALL TRANSCRIPT & COERCION DETECTION</div>
-            <p id="transcript-content" class="transcript-text">
-              "Officers have been dispatched and are standing outside your front door right now. Transfer ₹4,50,000 to the RBI verification escrow account immediately or our team will break the door!"
-            </p>
-            <div class="coercion-analysis-subbox" id="coercion-subbox">
-              <div class="coercion-title">REGEX COERCION CLASSIFIER: <span id="coercion-score-badge" class="badge-red">96% COERCION</span></div>
-              <div class="phrase-tags" id="detected-phrases-list">
-                <span class="phrase-tag">"outside your front door right now"</span>
-                <span class="phrase-tag">"break the door"</span>
+      <!-- ================= 3. MAIN DASHBOARD VIEWPORT ================= -->
+      <main class="main-viewport">
+        
+        <!-- TIER 1: LIVE EVIDENCE | CLAIM VS REALITY | CALL ANALYSIS -->
+        <div class="tier-1-grid">
+          
+          <!-- PANEL 1: LIVE EVIDENCE (RING DOORBELL) -->
+          <section class="dashboard-card" id="ring-panel">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span class="section-headline-bar"></span>
+                <span>Live Evidence</span>
+                <span style="color:var(--muted); font-size:10px;">• RING DOORBELL</span>
               </div>
+              <span class="badge-pill-live" id="ring-oracle-status-badge">● LIVE</span>
             </div>
-          </div>
 
-          <!-- BANK TRANSFERS FROZEN BADGE (Red) -->
-          <div class="bank-frozen-pill" id="bank-frozen-badge">
-            🔒 BANK TRANSFERS FROZEN BY POLICY
-          </div>
-
-          <!-- Interactive Payment Attempt -->
-          <div class="payment-action-box">
-            <button class="pay-btn" id="btn-attempt-payment" onclick="attemptPayment()">
-              💳 Test Payment of ₹4,50,000 [Simulated Gateway]
-            </button>
-            <div class="payment-status-msg" id="payment-status-display">
-              Payment Guard: Transfers LOCKED by MIRAGE-SHIELD
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- RIGHT COLUMN (65%): LIVING ROOM FIRE TV TAKEOVER -->
-    <section class="theater-col tv-col">
-      <div class="theater-col-header">
-        <div class="header-left-sub">
-          <span class="theater-col-title">📺 2. LIVING ROOM FIRE TV TAKEOVER</span>
-          <span class="tv-mode-tag">VEGA OS 10-FOOT INTERVENTION UI</span>
-        </div>
-        <a href="/firetv" target="_blank" class="tv-popout-btn">Open Full 10-Foot TV Window ↗</a>
-      </div>
-
-      <div class="tv-theater-card">
-        <!-- TOP HEADLINE: Bold High-Contrast Red Banner -->
-        <header class="tv-headline-banner">
-          <div class="flasher-badge">🚨 EMERGENCY LIVING ROOM DEFENSE</div>
-          <h1 class="theater-tv-headline" id="tv-takeover-title">
-            🚨 DIGITAL ARREST SCAM DETECTED: HANG UP IMMEDIATELY
-          </h1>
-          <p class="theater-tv-subtitle" id="tv-takeover-subtitle">
-            Indian Law Enforcement never conducts arrests or trials over video calls.
-          </p>
-        </header>
-
-        <!-- RING EVIDENCE CARD: Front Porch Camera Snapshot + Prominent Green Badge Overlay -->
-        <div class="ring-evidence-theater-card">
-          <div class="snapshot-display-wrap">
-            <img id="ring-camera-feed" src="/static/images/scenario1_empty_porch.jpg" alt="Ring Front Door Camera Snapshot" class="camera-snapshot-img">
-            <div class="ring-oracle-badge-overlay" id="ring-oracle-badge">
-              ✔ RING PHYSICAL ORACLE: 0 PEOPLE AT DOOR (ENTRANCE EMPTY)
-            </div>
-          </div>
-
-          <!-- Contradiction Hero: Side-by-Side Split Card -->
-          <div class="contradiction-callout contradiction-split-hero" id="oracle-verdict-callout">
-            <div class="split-col claim-col">
-              <div class="split-col-header">
-                <span class="split-tag claim-tag">🚨 CALLER CLAIMS</span>
-                <span class="callout-badge split-pill-sub">Extortion Script</span>
-              </div>
-              <div class="split-lead-text">"Armed police outside your door"</div>
-              <div class="split-detail-text">Threatens door raid & demands ₹4,50,000 transfer</div>
-            </div>
-            <div class="split-divider">
-              <span class="vs-circle">VS</span>
-            </div>
-            <div class="split-col truth-col">
-              <div class="split-col-header">
-                <span class="split-tag truth-tag">✔ RING SENSOR SHOWS</span>
-                <span class="split-pill-sub verified">Physical Truth</span>
-              </div>
-              <div class="split-lead-text truth-accent">Porch clear · 0 people · 0 vehicles</div>
-              <p id="oracle-contradiction-desc" class="split-desc-text">
-                Caller claims Mumbai Crime Branch officers are outside your front door, but Ring Doorbell verifies 0 people and 0 vehicles at the entrance in the last 6 hours.
-              </p>
-            </div>
-          </div>
-
-          <!-- Clean Metric Chips Row: 0 Humans, 0 Packages, 0 Dings -->
-          <div class="ring-metrics-wrapper">
-            <div class="ring-metrics-pills">
-              <div class="metric-pill">
-                <span class="pill-ico">👤</span>
-                <div class="pill-content">
-                  <span class="pill-number"><span id="r-human-count">0</span> Humans</span>
-                  <span class="pill-title">in the last 6 hours</span>
-                </div>
-              </div>
-              <div class="metric-pill">
-                <span class="pill-ico">📦</span>
-                <div class="pill-content">
-                  <span class="pill-number"><span id="r-pkg-count">0</span> Packages</span>
-                  <span class="pill-title">in the last 6 hours</span>
-                </div>
-              </div>
-              <div class="metric-pill">
-                <span class="pill-ico">🔔</span>
-                <div class="pill-content">
-                  <span class="pill-number"><span id="r-ding-count">0</span> Dings</span>
-                  <span class="pill-title">in the last 6 hours</span>
+            <div class="evidence-media-wrap">
+              <img id="ring-camera-feed" class="evidence-img" src="/static/images/scenario1_empty_porch.jpg" alt="Ring Front Door Camera Snapshot">
+              <div class="evidence-top-overlay">
+                <span class="evidence-timestamp" id="ring-feed-timestamp">23 Oct 2026 14:32:16</span>
+                <div class="evidence-ctrl-icons">
+                  <button class="evidence-icon-btn" type="button" title="View Doorbell Live Stream" onclick="viewDoorbellLive()">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  </button>
+                  <button class="evidence-icon-btn" type="button" title="Ring Hardware Snapshot" onclick="viewDoorbellLive()">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Door & Chime Status Strip -->
-          <div class="ring-chime-subbar">
-            <div class="subbar-cell">
-              <span class="subbar-lbl">Door Status:</span>
-              <span class="subbar-val clear" id="door-status-pill">CLEAR (PORCH SECURE)</span>
+            <div class="evidence-footer-bar">
+              <span class="device-label" id="ring-device-name">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                <span>Ring Video Doorbell Pro</span>
+              </span>
+              <span style="font-family:var(--font-mono); font-size:9.5px; color:var(--muted);" id="door-hash-pill">SHA256: 9f83c18b...</span>
             </div>
-            <div class="subbar-cell">
-              <span class="subbar-lbl">Ring Chime:</span>
-              <span class="subbar-val alert" id="r-chime-status">ALERT SOUNDING [SIMULATED CHIME]</span>
+          </section>
+
+          <!-- PANEL 2: CLAIM VS REALITY -->
+          <section class="dashboard-card claim-reality-card">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span>Claim vs Reality</span>
+              </div>
             </div>
-            <div class="subbar-cell hash" id="door-hash-pill" title="Cryptographic SHA256 integrity hash">
-              SHA256: 9f83c18b...
+
+            <!-- Caller Claims -->
+            <div class="cvs-block caller-claim">
+              <span class="cvs-block-label">Caller claims:</span>
+              <div class="cvs-block-content">
+                <div class="cvs-icon-circle">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="cvs-metric-group">
+                  <span class="cvs-number" id="claim-count">3 OFFICERS</span>
+                  <span class="cvs-sub" id="claim-sub">outside your door</span>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <!-- ACTION BAR: Prominent 1930 Helpline & End Call Buttons -->
-        <footer class="theater-actions-bar">
-          <button class="theater-action-btn helpline" id="btn-theater-helpline" onclick="dial1930()">
-            <span class="btn-icon">📞</span>
-            <span class="btn-text">1930 Cyber Helpline</span>
-          </button>
-          <button class="theater-action-btn end-call focused" id="btn-theater-hangup" onclick="endCallAndProtect()">
-            <span class="keycap keycap-select-light">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
-              SELECT
-            </span>
-            <span class="btn-text">End Call & Protect Account</span>
-          </button>
-          <button class="theater-action-btn doorbell" id="btn-theater-doorbell" onclick="viewDoorbellLive()">
-            <span class="keycap keycap-nav">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
-              UP
-            </span>
-            <span class="btn-text">View Doorbell Live</span>
-          </button>
-        </footer>
+            <div class="cvs-divider-line"></div>
 
-        <!-- Hidden background TV iframe for background synchronization -->
-        <iframe src="/firetv" id="tv-iframe" class="tv-hidden-embed" tabindex="-1"></iframe>
-      </div>
-    </section>
-  </main>
+            <!-- Ring Detects -->
+            <div class="cvs-block ring-truth">
+              <span class="cvs-block-label">Ring detects:</span>
+              <div class="cvs-block-content">
+                <div class="cvs-icon-circle">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="cvs-metric-group">
+                  <span class="cvs-number"><span id="r-human-count">0</span> HUMANS</span>
+                  <span class="cvs-sub">detected</span>
+                </div>
+              </div>
+            </div>
 
-  <!-- BOTTOM COLLAPSIBLE TECHNICAL TELEMETRY DRAWER -->
-  <section class="bottom-drawer-container">
-    <button class="bottom-drawer-toggle" id="drawer-toggle-btn" onclick="toggleDiagnosticsTray()">
-      <div class="toggle-left">
-        <span class="gear-icon">⚙️</span>
-        <strong class="drawer-title">System & Ring Hardware Diagnostics</strong>
-        <span class="drawer-hint">(Click to Expand Live Audit, Telemetry & Cryptographic Verification)</span>
-      </div>
-      <div class="toggle-right">
-        <span class="chevron" id="drawer-chevron">▾ Expand Diagnostics</span>
-      </div>
-    </button>
-
-    <div class="diagnostics-drawer collapsed" id="diagnostics-drawer">
-      <div class="drawer-deck">
-        <!-- CARD 1: RING HARDWARE & POLL LOG -->
-        <div class="drawer-card">
-          <div class="drawer-card-header">
-            <span>🔔 Ring Device & Partner API</span>
-            <span class="pane-status armed" id="ring-oracle-status-badge">PLAYGROUND (LIVE API)</span>
-          </div>
-          <div class="drawer-card-body">
-            <div class="diag-device-row">
-              <img id="ring-device-thumb" 
-                   src="https://app-content.ring.com/shared/images/devices/square_device_images/DoorbellPro/rvdp_3x.png" 
-                   alt="Ring Hardware" class="diag-thumb">
+            <!-- PHYSICAL CONTRADICTION DETECTED - WITH HERO GLOW -->
+            <div class="contradiction-glow-box" id="oracle-verdict-callout">
+              <svg class="contra-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
               <div>
-                <strong id="ring-device-name">Playground Device</strong>
-                <div class="diag-sub">Ring Video Doorbell Pro (v4) · Official Partner API</div>
-                <code class="device-id-code" id="ring-device-id-chip" title="Ring Playground Device ID">ava1.ring.device...</code>
+                <div class="contra-headline">PHYSICAL CONTRADICTION DETECTED</div>
+                <div class="contra-sub" id="oracle-contradiction-desc">0 people & 0 vehicles at entrance in past 6 hours.</div>
+              </div>
+              <span class="callout-badge" style="display:none;"></span>
+            </div>
+          </section>
+
+          <!-- PANEL 3: CALL ANALYSIS (AI AGENT) -->
+          <section class="dashboard-card call-analysis-card" id="analysis-panel">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF304F" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <span>Call Analysis (AI Agent)</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="badge-pill-threat" id="call-status-badge">● LIVE</span>
+                <span style="font-family:var(--font-mono); font-size:10px; color:var(--text-2);" id="call-duration-timer">00:01:24</span>
               </div>
             </div>
-            <div class="diag-log-box">
-              <div class="diag-log-hdr">LIVE EVENT POLLING (GET /v1/devices)</div>
-              <div class="activity-log-scroll" id="ring-activity-log">
-                <div class="a-log-item success"><span class="a-time">[12:48:10]</span> GET /v1/devices -> 200 OK (Playground Device)</div>
-                <div class="a-log-item info"><span class="a-time">[12:48:11]</span> Event history query: 0 human detections, 0 dings in 6h window</div>
-                <div class="a-log-item warn"><span class="a-time">[12:48:12]</span> Oracle cross-check: Porch CLEAR · sha256: 9f83c18b...</div>
-                <div class="a-log-item alert"><span class="a-time">[12:48:13]</span> Chime triggered: audio_ref_urgent_security_alert</div>
+
+            <!-- Quote Snippet with Audio Icon -->
+            <div class="transcript-quote-box">
+              <svg class="quote-waveform-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5v14M22 9v6M7 5v14M2 9v6"/></svg>
+              <div class="quote-text" id="transcript-quote">
+                “Armed police are outside your door. Transfer ₹4,50,000 now.”
+              </div>
+              <svg width="34" height="34" viewBox="0 0 36 36" fill="none" stroke="#FF304F" stroke-width="1.2" opacity="0.8">
+                <circle cx="18" cy="18" r="14" stroke-dasharray="2 2"/>
+                <circle cx="14" cy="15" r="2"/>
+                <circle cx="22" cy="15" r="2"/>
+                <path d="M14 23c2 2 6 2 8 0"/>
+              </svg>
+            </div>
+
+            <!-- Threat Tag Chips -->
+            <div class="threat-chips-bar" id="detected-phrases-list">
+              <span class="threat-chip">Digital Arrest</span>
+              <span class="threat-chip">Coercion</span>
+              <span class="threat-chip">Isolation Tactic</span>
+              <span class="threat-chip">Fake Authority</span>
+            </div>
+
+            <!-- Tab Row -->
+            <div class="analysis-tab-row">
+              <div class="tab-group-left">
+                <button class="ana-tab-btn" type="button" onclick="toggleVictimPhoneDrawer(true)">Transcript</button>
+                <button class="ana-tab-btn active" type="button">Analysis</button>
+                <button class="ana-tab-btn" type="button">Indicators</button>
+              </div>
+              <button class="phone-view-toggle-btn" type="button" onclick="toggleVictimPhoneDrawer()">
+                📱 Phone Screen
+              </button>
+            </div>
+
+            <!-- Analysis Split View: Checklist + Deepfake Score -->
+            <div class="analysis-split-view">
+              <!-- Left: 4 Checklist items -->
+              <div class="coercion-checklist">
+                <div class="checklist-item">
+                  <div class="checklist-left">
+                    <svg class="check-ico-danger" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    <div class="check-text-group">
+                      <span class="check-title">Coercion / Threat Language</span>
+                      <span class="check-sub">Detected (arrest, immediate action)</span>
+                    </div>
+                  </div>
+                  <span class="severity-pill-high" id="coercion-score-badge">HIGH</span>
+                </div>
+
+                <div class="checklist-item">
+                  <div class="checklist-left">
+                    <svg class="check-ico-danger" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    <div class="check-text-group">
+                      <span class="check-title">Isolation Language</span>
+                      <span class="check-sub">Detected (stay in room, don't tell anyone)</span>
+                    </div>
+                  </div>
+                  <span class="severity-pill-high">HIGH</span>
+                </div>
+
+                <div class="checklist-item">
+                  <div class="checklist-left">
+                    <svg class="check-ico-danger" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    <div class="check-text-group">
+                      <span class="check-title">Fake Authority Claim</span>
+                      <span class="check-sub">Detected (police, customs, RBI)</span>
+                    </div>
+                  </div>
+                  <span class="severity-pill-high">HIGH</span>
+                </div>
+
+                <div class="checklist-item">
+                  <div class="checklist-left">
+                    <svg class="check-ico-danger" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    <div class="check-text-group">
+                      <span class="check-title">Suspicious Script Pattern</span>
+                      <span class="check-sub">Matches known scam templates</span>
+                    </div>
+                  </div>
+                  <span class="severity-pill-high">HIGH</span>
+                </div>
+              </div>
+
+              <!-- Right: Deepfake Hero Score & Waveform -->
+              <div class="deepfake-subpanel">
+                <div>
+                  <div class="df-title">Deepfake Score (face + voice)</div>
+                  <div class="df-hero-score"><span id="df-score-number">0.92</span> <span>/ 1.00</span></div>
+                  <div class="df-progress-track">
+                    <div class="df-progress-bar" id="df-progress-bar"></div>
+                  </div>
+                  <div class="df-sublabel">Likely AI-generated or spoofed</div>
+                  <div class="honest-scope-chip" id="deepfake-tag">
+                    <span id="df-percentage">Deepfake analysis simulated</span>
+                  </div>
+                </div>
+
+                <div class="live-audio-waveform-row" id="waveform-bar">
+                  <div class="audio-bars-anim">
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                  </div>
+                  <span class="live-trans-tag">Live Transcription</span>
+                </div>
               </div>
             </div>
+          </section>
+        </div>
+
+        <!-- TIER 2: AUTOMATED RESPONSE (4 LIVING-ROOM SHIELDS) -->
+        <section class="response-row-container" id="response-panel">
+          <div class="section-headline-row">
+            <span class="section-headline-bar"></span>
+            <span>Automated Response (4 Living-Room Shields)</span>
+          </div>
+
+          <div class="response-deck">
+            <!-- MODULE 1: FIRE TV -->
+            <div class="response-module-card">
+              <div class="module-header">
+                <div class="module-id-group">
+                  <svg class="module-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+                  <span class="module-name">FIRE TV</span>
+                </div>
+                <span class="module-status-chip ready" id="tv-status-chip">● READY</span>
+              </div>
+              <div class="module-action-title" id="tv-takeover-title">Takeover Ready</div>
+              <p class="module-desc" id="tv-takeover-subtitle">Display alert with live evidence & 1930 helpline. Fire TV Simulator (Vega OS)</p>
+              <div class="module-actions-row">
+                <button class="module-btn-subtle" type="button" onclick="openTakeoverModal()">Launch TV Overlay</button>
+                <a href="/firetv" target="_blank" class="module-btn-subtle" style="text-align:center; text-decoration:none;">10-Foot View ↗</a>
+              </div>
+            </div>
+
+            <!-- MODULE 2: RING CHIME -->
+            <div class="response-module-card">
+              <div class="module-header">
+                <div class="module-id-group">
+                  <svg class="module-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                  <span class="module-name">RING CHIME</span>
+                </div>
+                <span class="module-status-chip ready" id="chime-chip">● READY</span>
+              </div>
+              <div class="module-action-title" id="r-chime-status">Alert Queued</div>
+              <p class="module-desc">Play urgent security alert on scam detection. [SIMULATED CHIME]</p>
+              <div class="module-actions-row">
+                <span style="font-size:9.5px; color:var(--muted); line-height:22px;">Synced with living room chime</span>
+              </div>
+            </div>
+
+            <!-- MODULE 3: PAYMENTGUARD -->
+            <div class="response-module-card">
+              <div class="module-header">
+                <div class="module-id-group">
+                  <svg class="module-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                  <span class="module-name">PAYMENTGUARD</span>
+                </div>
+                <span class="module-status-chip active" id="bank-frozen-badge">● ACTIVE</span>
+              </div>
+              <div class="module-action-title alert">Transfers Frozen</div>
+              <p class="module-desc" id="payment-status-display">Outgoing UPI/bank transfers blocked immediately. [Simulated Gateway]</p>
+              <div class="module-actions-row">
+                <button class="module-btn-subtle" id="btn-attempt-payment" type="button" onclick="attemptPayment()">Attempt Payment</button>
+              </div>
+            </div>
+
+            <!-- MODULE 4: FAMILY GUARDIAN -->
+            <div class="response-module-card">
+              <div class="module-header">
+                <div class="module-id-group">
+                  <svg class="module-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  <span class="module-name">FAMILY GUARDIAN</span>
+                </div>
+                <span class="module-status-chip sent" id="family-status-badge">● SENT</span>
+              </div>
+              <div class="module-action-title">SMS Alert</div>
+              <p class="module-desc" id="family-sms-body">Alert sent to 2 family members with incident details. SIMULATED SMS</p>
+              <div class="module-actions-row">
+                <button class="module-btn-subtle" id="btn-approve-cosign" type="button" onclick="approveCosign()">Family Co-Sign</button>
+                <button class="module-btn-subtle" id="btn-reject-cosign" type="button" onclick="rejectPayment()">Reject</button>
+              </div>
+              <div style="font-size:9px; color:var(--muted); margin-top:2px;" id="cosign-result-text">Current Status: Transfers Frozen by Policy</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TIER 3: RECENT INCIDENTS | AUDIT & INTEGRITY -->
+        <div class="tier-3-grid">
+          
+          <!-- LEFT: RECENT INCIDENTS -->
+          <section class="incidents-card" id="incidents-panel">
+            <div class="incidents-header-row">
+              <div class="card-title-group">
+                <span class="section-headline-bar"></span>
+                <span>Recent Incidents →</span>
+              </div>
+              <span style="font-size:10px; color:var(--muted); cursor:pointer;">View all →</span>
+            </div>
+
+            <div class="incidents-table" id="incidents-table-body">
+              <!-- Dynamically populated or rendered -->
+              <div class="incident-row">
+                <div class="inc-ico-circle red">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </div>
+                <div class="inc-main">
+                  <span class="inc-title">Digital arrest attempt</span>
+                  <span class="inc-sub">Scam call with fake police claim</span>
+                </div>
+                <span class="inc-time">14:32<br>23 Oct 2026</span>
+                <span class="inc-badge-pill danger">HIGH RISK</span>
+                <span class="inc-meta-ring">Ring: 0 humans</span>
+                <span class="inc-meta-extra">Deepfake: 0.92</span>
+                <span class="inc-arrow">›</span>
+              </div>
+
+              <div class="incident-row">
+                <div class="inc-ico-circle green">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                </div>
+                <div class="inc-main">
+                  <span class="inc-title">Family video call</span>
+                  <span class="inc-sub">Sister video call (Chennai)</span>
+                </div>
+                <span class="inc-time">13:08<br>23 Oct 2026</span>
+                <span class="inc-badge-pill safe">VERIFIED SAFE</span>
+                <span class="inc-meta-ring">Ring: 1 human</span>
+                <span class="inc-meta-extra">Normal call</span>
+                <span class="inc-arrow">›</span>
+              </div>
+
+              <div class="incident-row">
+                <div class="inc-ico-circle blue">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                </div>
+                <div class="inc-main">
+                  <span class="inc-title">Courier arrival</span>
+                  <span class="inc-sub">Amazon delivery (package detected)</span>
+                </div>
+                <span class="inc-time">12:41<br>23 Oct 2026</span>
+                <span class="inc-badge-pill delivery">VERIFIED DELIVERY</span>
+                <span class="inc-meta-ring">Ring: 1 human</span>
+                <span class="inc-meta-extra">Package detected</span>
+                <span class="inc-arrow">›</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- RIGHT: AUDIT & INTEGRITY -->
+          <section class="audit-integrity-card" id="audit-panel">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span class="section-headline-bar"></span>
+                <span>Audit & Integrity</span>
+              </div>
+            </div>
+
+            <div class="audit-lead-box">
+              <svg class="audit-shield-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+              <div class="audit-lead-text">
+                <span class="audit-system-title" id="audit-system-mode">LOCAL_HMAC_SHA256_SANDBOX</span>
+                <span class="audit-system-sub">All events are cryptographically signed and stored in immutable ledger.</span>
+              </div>
+            </div>
+
+            <div class="audit-hash-container">
+              <span class="audit-hash-header">Latest Event Hash</span>
+              <div class="audit-hash-row">
+                <code class="audit-hash-code" id="kms-sig-display">3f9a6c7e...d2b4e1f0</code>
+                <button class="copy-hash-btn" id="btn-copy-hash" type="button" title="Copy to clipboard" onclick="copyAuditHash()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="audit-footer-row">
+              <span style="color:var(--green); font-size:9.5px; font-weight:600;" id="verify-status-text">Signature Verified Valid</span>
+              <a href="#" class="audit-ledger-link" onclick="toggleDiagnosticsTray(); return false;">Open full evidence ledger →</a>
+            </div>
+          </section>
+        </div>
+
+      </main>
+    </div>
+
+    <!-- ================= VICTIM PHONE DRAWER (EXPANDABLE/EMBEDDED) ================= -->
+    <div class="victim-phone-drawer" id="victim-phone-drawer">
+      <div class="phone-top-bar">
+        <span style="font-weight:600; color:#fff;" id="phone-status-time">14:32</span>
+        <span style="color:var(--muted); font-size:10px;">STAGED CALL</span>
+        <button type="button" onclick="toggleVictimPhoneDrawer(false)" style="background:transparent; border:none; color:var(--muted); cursor:pointer;">✕</button>
+      </div>
+
+      <div class="phone-screen-embed">
+        <div class="phone-video-wrap">
+          <img id="call-video-feed" src="/static/images/scam_officer_call.jpg" alt="Victim Phone Screen">
+          <div class="phone-staged-chip">STAGED CALL</div>
+          <div class="phone-caller-info">
+            <div class="phone-caller-name">
+              <span id="caller-name-display">ACP Vikram Rathore</span>
+              <span class="call-timer-pill" style="font-size:10px; color:var(--blue);">00:01:24</span>
+            </div>
+            <div class="phone-caller-org" id="caller-org-display">Crime Branch / Mumbai Narcotics</div>
           </div>
         </div>
 
-        <!-- CARD 2: AGENT ENGINE & AUDIT LEDGER -->
-        <div class="drawer-card">
-          <div class="drawer-card-header">
-            <span>🧠 Reasoning Agent Engine</span>
-            <span class="pane-status kms" id="audit-status-badge">HMAC LEDGER</span>
-          </div>
-          <div class="drawer-card-body">
-            <div class="diag-item-row">
-              <span>Engine:</span> <strong id="tel-agent">LOCAL RULE HEURISTIC</strong>
-            </div>
-            <div class="diag-log-box">
-              <div class="diag-log-hdr">AGENT REASONING LOG STREAM</div>
-              <div class="terminal-logs" id="agent-logs">
-                <div class="t-line info">[12:48:10] Agent initialized with reasoning heuristics & Ring oracle tools.</div>
-                <div class="t-line call">[12:48:11] Incoming call evaluated: Coercion=96% (Dynamic Regex).</div>
-                <div class="t-line oracle">[12:48:12] Querying Ring Oracle: get_door_evidence(window=6h).</div>
-                <div class="t-line oracle">[12:48:13] Ring returned 0 people, 0 parcels. Physical contradiction confirmed!</div>
-                <div class="t-line action">[12:48:14] Verdict=INTERVENE -> Executed lock_payments & trigger_tv_alert.</div>
-              </div>
-            </div>
-            <div class="kms-sig-wrap">
-              <div class="kms-lbl">CRYPTOGRAPHIC SIGNATURE [HMAC-SHA256]:</div>
-              <code class="kms-code" id="kms-sig-display">hmac_sha256_9f83c18b76d0d2ff881679058b8d4f40f0c05763bf84c35626eb06c4ff94e09d</code>
-              <div class="sig-action-row">
-                <button class="audit-btn" onclick="verifyKmsSignature()">✔ Verify Signature</button>
-                <span class="verify-status" id="verify-status-text">Signature Verified Valid</span>
-              </div>
-            </div>
-          </div>
+        <!-- Phone decorative controls -->
+        <div class="phone-call-btns-row" aria-hidden="true">
+          <div class="phone-btn-circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></div>
+          <div class="phone-btn-circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
+          <div class="phone-btn-circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="4" height="4"/><rect x="10" y="3" width="4" height="4"/><rect x="17" y="3" width="4" height="4"/><rect x="3" y="10" width="4" height="4"/><rect x="10" y="10" width="4" height="4"/><rect x="17" y="10" width="4" height="4"/></svg></div>
+          <div class="phone-btn-circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></div>
+          <div class="phone-btn-circle end-call"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"/></svg></div>
         </div>
 
-        <!-- CARD 3: FAMILY GUARDIAN CO-SIGN & 1930 REPORT -->
-        <div class="drawer-card">
-          <div class="drawer-card-header">
-            <span>👨‍👩‍👧 Family Guardian Co-Sign</span>
-            <span class="pane-status alert" id="family-status-badge">EMERGENCY ALERT</span>
-          </div>
-          <div class="drawer-card-body">
-            <div class="alert-sms-bubble">
-              <div class="sms-sender">SIMULATED SMS · 12:48 PM</div>
-              <div class="sms-body" id="family-sms-body">
-                🚨 <strong>SUSPECTED DIGITAL ARREST SCAM:</strong> Mom is on an active video call. Ring camera verifies NO ONE is outside. <strong>Bank payments locked.</strong>
-              </div>
-            </div>
-            <div class="cosign-control-box">
-              <div class="cosign-hdr">FAMILY AUTHORIZATION REQUIRED TO RELEASE FUNDS:</div>
-              <div class="cosign-buttons">
-                <button class="cosign-btn reject" onclick="rejectPayment()">✖ Block & File 1930</button>
-                <button class="cosign-btn approve" onclick="approveCosign()">✔ Family Co-Sign</button>
-              </div>
-              <div class="cosign-result" id="cosign-result-text">Current Status: Transfers Frozen by Policy</div>
-            </div>
+        <!-- Phone Transcript Caption Lines -->
+        <div class="phone-caption-box">
+          <div style="font-size:9px; color:var(--muted); margin-bottom:4px; font-weight:600;">LIVE CLOSED CAPTION:</div>
+          <div id="transcript-content">
+            "Officers have been dispatched and are standing outside your front door right now. Transfer ₹4,50,000 to the RBI verification escrow account immediately or our team will break the door!"
           </div>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- CONSOLE FOOTER -->
-  <footer class="console-footer">
-    <div class="footer-left">
-      <span class="footer-shield">🛡️</span>
-      <span class="footer-brand">MIRAGE-SHIELD</span>
-      <span class="footer-dim">· Amazon Developer Hackathon 2026</span>
+    <!-- ================= FULLSCREEN FIRE TV TAKEOVER OVERLAY ================= -->
+    <div class="firetv-takeover-modal" id="takeover-modal">
+      <div class="takeover-modal-dialog">
+        <div class="modal-header-bar">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+            <strong style="color:#fff; font-size:12px; letter-spacing:0.06em;">FIRE TV TAKEOVER · LIVING ROOM INTERVENTION</strong>
+          </div>
+          <button class="modal-close-btn" type="button" onclick="closeTakeoverModal()">✕</button>
+        </div>
+
+        <div class="takeover-content-body">
+          <div style="text-align:center; padding:10px 0;">
+            <span style="background:rgba(255,48,79,0.2); color:#ff6b7e; border:1px solid var(--red); padding:3px 10px; border-radius:4px; font-size:11px; font-weight:700;">
+              🚨 DIGITAL ARREST SCAM DETECTED · HANG UP IMMEDIATELY
+            </span>
+            <div style="font-size:18px; font-weight:800; color:#fff; margin-top:8px;">
+              Indian Law Enforcement never conducts arrests or trials over video calls.
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div style="border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); max-height:220px; background:#000;">
+              <img src="/static/images/scenario1_empty_porch.jpg" alt="Front Porch" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div style="display:flex; flex-direction:column; justify-content:center; gap:10px; background:var(--panel-2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px;">
+              <div>
+                <span style="font-size:10px; color:#ff6b7e; font-weight:700;">CALLER CLAIMS:</span>
+                <div style="font-size:14px; font-weight:700; color:#fff;">"Armed police outside your door"</div>
+              </div>
+              <div style="height:1px; background:var(--border);"></div>
+              <div>
+                <span style="font-size:10px; color:var(--green); font-weight:700;">RING SENSOR SHOWS:</span>
+                <div style="font-size:14px; font-weight:700; color:#fff;">Porch clear · 0 people · 0 vehicles</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:center; gap:12px; margin-top:8px;">
+            <button class="scen-btn active" style="padding:8px 16px; font-weight:700;" type="button" onclick="dial1930()">
+              📞 Dial 1930 Cyber Helpline
+            </button>
+            <button class="scen-btn" style="padding:8px 16px; background:#fff; color:#03080D; font-weight:700;" type="button" onclick="endCallAndProtect()">
+              ✔ End Call & Protect Account
+            </button>
+            <button class="scen-btn" style="padding:8px 16px;" type="button" onclick="closeTakeoverModal()">
+              Dismiss Overlay
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="footer-right">
-      <span>Ring Partner API: <code class="mono-code">api.amazonvision.com</code></span>
-      <span class="footer-sep">·</span>
-      <span>Living Room Display: <code class="mono-code">Fire TV Simulator (Vega OS)</code></span>
-      <span class="footer-sep">·</span>
-      <span>Ledger: <code class="mono-code">HMAC-SHA256 Cryptographic Audit</code></span>
+
+    <!-- ================= LEGACY PRESERVE DOM LAYER ================= -->
+    <!-- Preserves all element IDs required by app.js, tests, and API watchers -->
+    <div class="dom-legacy-preserve" aria-hidden="true">
+      <span id="door-status-pill">CLEAR</span>
+      <span id="r-pkg-count">0</span>
+      <span id="r-ding-count">0</span>
+      <span id="ring-oracle-badge">✔ RING PHYSICAL ORACLE: 0 PEOPLE AT DOOR</span>
+      <span id="tel-agent">LOCAL RULE HEURISTIC</span>
+      <span id="tel-agent-dot" class="dot green"></span>
+      <span id="coercion-subbox"></span>
+      <button id="tray-toggle-btn" onclick="toggleDiagnosticsTray()"></button>
+      <button id="drawer-toggle-btn" onclick="toggleDiagnosticsTray()"></button>
+      <span id="tray-chevron">▾</span>
+      <span id="drawer-chevron">▾</span>
+      <div id="diagnostics-drawer" class="collapsed">
+        <div id="ring-activity-log"></div>
+        <div id="agent-logs"></div>
+        <img id="ring-device-thumb" src="" alt="">
+        <span id="ring-device-id-chip"></span>
+      </div>
+      <iframe src="/firetv" id="tv-iframe"></iframe>
     </div>
-  </footer>
+
+    <!-- In-page Toast Notification -->
+    <div id="console-toast" class="console-toast hidden" role="alert">
+      <div class="toast-indicator"></div>
+      <div class="toast-content">
+        <strong id="toast-title" class="toast-title">Notification</strong>
+        <p id="toast-message" class="toast-message">Message text</p>
+      </div>
+      <button type="button" class="toast-dismiss-btn" onclick="hideToast()">✕</button>
+    </div>
+
+  </div>
 
   <script src="/console/app.js"></script>
 </body>
